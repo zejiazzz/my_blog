@@ -10,7 +10,7 @@ export default function NewPostPage() {
       title: formData.get('title') as string,
       slug: formData.get('slug') as string,
       content: formData.get('content') as string,
-      excerpt: (formData.get('excerpt') as string) || null,
+      excerpt: (formData.get('excerpt') as string) || undefined,
       published: formData.get('published') === 'on',
     });
     revalidatePath('/admin');
