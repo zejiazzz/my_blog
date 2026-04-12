@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase-server'
+import { createClient as createServerClient } from '@/lib/supabase-server'
+import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 
 interface Props {
@@ -7,7 +8,10 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const supabase = await createClient()
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
   const { data: posts } = await supabase
     .from('posts')
     .select('slug')
@@ -18,7 +22,7 @@ export async function generateStaticParams() {
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
-  const supabase = await createClient()
+  const supabase = await createServerClient()
 
   const { data: post } = await supabase
     .from('posts')
@@ -37,7 +41,6 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <article>
-      {/* Back */}
       <div className="mb-10">
         <Link
           href="/"
@@ -48,7 +51,6 @@ export default async function PostPage({ params }: Props) {
         </Link>
       </div>
 
-      {/* Header */}
       <header className="mb-10 pb-8" style={{ borderBottom: '1px solid var(--border)' }}>
         <h1
           className="text-2xl font-semibold leading-tight mb-4"
@@ -64,12 +66,10 @@ export default async function PostPage({ params }: Props) {
         </div>
       </header>
 
-      {/* Content */}
       <div className="prose-dark whitespace-pre-wrap">
         {post.content}
       </div>
 
-      {/* Footer */}
       <div
         className="mt-16 pt-8 font-mono text-xs flex items-center gap-2"
         style={{ borderTop: '1px solid var(--border)', color: 'var(--text-muted)' }}
