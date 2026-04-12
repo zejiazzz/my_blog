@@ -30,6 +30,12 @@ export default async function Nav() {
           <Link href="/about" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
             {nav.about}
           </Link>
+          <Link href="/skills" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
+            {nav.skills}
+          </Link>
+          <Link href="/mcp" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
+            {nav.mcp}
+          </Link>
           <Link href="/admin" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
             {nav.admin}
           </Link>

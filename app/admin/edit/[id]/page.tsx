@@ -5,7 +5,15 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import PostForm from '@/components/PostForm'
+import { t } from '@/lib/i18n'
 import type { Post } from '@/lib/types'
+import type { Lang } from '@/lib/i18n'
+
+function getLang(): Lang {
+  if (typeof document === 'undefined') return 'zh'
+  const match = document.cookie.match(/(?:^|;\s*)lang=([^;]*)/)
+  return (match?.[1] as Lang) || 'zh'
+}
 
 interface Props {
   params: Promise<{ id: string }>
@@ -14,6 +22,8 @@ interface Props {
 export default function EditPostPage({ params }: Props) {
   const [post, setPost] = useState<Post | null>(null)
   const [loading, setLoading] = useState(true)
+  const [lang] = useState<Lang>(() => getLang())
+  const tr = t[lang].admin
   const supabase = createClient()
 
   useEffect(() => {
@@ -37,7 +47,7 @@ export default function EditPostPage({ params }: Props) {
   if (loading) {
     return (
       <div className="font-mono text-sm" style={{ color: 'var(--text-muted)' }}>
-        Loading...
+        {tr.loading}
       </div>
     )
   }
@@ -48,7 +58,7 @@ export default function EditPostPage({ params }: Props) {
     <div>
       <div className="mb-8">
         <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
-          ← back
+          {tr.back}
         </Link>
       </div>
       <div className="mb-8">
@@ -56,10 +66,10 @@ export default function EditPostPage({ params }: Props) {
           <span style={{ color: 'var(--accent-green)' }}>❯</span> vim {post.slug}.md
         </p>
         <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>
-          Edit Post
+          {tr.editPostTitle}
         </h1>
       </div>
-      <PostForm post={post} />
+      <PostForm post={post} lang={lang} />
     </div>
   )
 }

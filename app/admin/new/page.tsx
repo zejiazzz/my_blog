@@ -1,12 +1,18 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import PostForm from '@/components/PostForm'
+import { t, type Lang } from '@/lib/i18n'
 
-export default function NewPostPage() {
+export default async function NewPostPage() {
+  const cookieStore = await cookies()
+  const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
+  const tr = t[lang].admin
+
   return (
     <div>
       <div className="mb-8">
         <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
-          ← back
+          {tr.back}
         </Link>
       </div>
       <div className="mb-8">
@@ -14,10 +20,10 @@ export default function NewPostPage() {
           <span style={{ color: 'var(--accent-green)' }}>❯</span> touch new-post.md
         </p>
         <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>
-          New Post
+          {tr.newPostTitle}
         </h1>
       </div>
-      <PostForm />
+      <PostForm lang={lang} />
     </div>
   )
 }

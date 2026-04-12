@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation'
 import { createClient as createServerClient } from '@/lib/supabase-server'
 import { createClient } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
 import Link from 'next/link'
+import { t, type Lang } from '@/lib/i18n'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -23,6 +25,9 @@ export async function generateStaticParams() {
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const supabase = await createServerClient()
+  const cookieStore = await cookies()
+  const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
+  const tr = t[lang].post
 
   const { data: post } = await supabase
     .from('posts')
@@ -33,7 +38,7 @@ export default async function PostPage({ params }: Props) {
 
   if (!post) notFound()
 
-  const date = new Date(post.created_at).toLocaleDateString('en-US', {
+  const date = new Date(post.created_at).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -47,7 +52,7 @@ export default async function PostPage({ params }: Props) {
           className="font-mono text-xs transition-colors"
           style={{ color: 'var(--accent)' }}
         >
-          ← cd ..
+          {tr.back}
         </Link>
       </div>
 
@@ -81,7 +86,7 @@ export default async function PostPage({ params }: Props) {
           style={{ color: 'var(--text-muted)' }}
           className="hover:text-[var(--accent)] transition-colors"
         >
-          back to index
+          {tr.backToIndex}
         </Link>
       </div>
     </article>

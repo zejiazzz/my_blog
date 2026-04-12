@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
+import { t, type Lang } from '@/lib/i18n'
 import type { Post } from '@/lib/types'
 
 function slugify(text: string): string {
@@ -16,14 +17,16 @@ function slugify(text: string): string {
 
 interface PostFormProps {
   post?: Post
+  lang?: Lang
 }
 
-export default function PostForm({ post }: PostFormProps) {
+export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
   const [slug, setSlug] = useState(post?.slug ?? '')
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!post?.slug)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+  const tr = t[lang].admin
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!slugManuallyEdited) {
@@ -51,7 +54,6 @@ export default function PostForm({ post }: PostFormProps) {
 
     try {
       if (post) {
-        // Update
         const { error } = await supabase
           .from('posts')
           .update(data)
@@ -59,7 +61,6 @@ export default function PostForm({ post }: PostFormProps) {
 
         if (error) throw error
       } else {
-        // Create
         const { error } = await supabase.from('posts').insert(data)
         if (error) throw error
       }
@@ -68,7 +69,7 @@ export default function PostForm({ post }: PostFormProps) {
       router.refresh()
     } catch (error) {
       console.error('Error saving post:', error)
-      alert('Failed to save post')
+      alert(tr.saveFail)
     } finally {
       setLoading(false)
     }
@@ -166,14 +167,14 @@ export default function PostForm({ post }: PostFormProps) {
             >
               <span className="w-3 h-3 rounded-full bg-current transition-transform peer-checked:translate-x-4" />
             </span>
-            publish immediately
+            {tr.publishLabel}
           </label>
         </div>
       </div>
 
       <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem' }}>
         <button type="submit" disabled={loading} className="btn-primary font-mono">
-          {loading ? 'saving...' : post ? '→ update post' : '→ create post'}
+          {loading ? tr.saving : post ? tr.updateBtn : tr.createBtn}
         </button>
       </div>
     </form>
