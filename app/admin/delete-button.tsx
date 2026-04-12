@@ -4,12 +4,13 @@ export function DeleteButton({ postId }: { postId: number }) {
   return (
     <button
       type="submit"
-      className="text-red-600 hover:underline"
+      className="font-mono text-xs transition-colors hover:underline"
+      style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer' }}
       onClick={(e) => {
         if (!confirm('Delete this post?')) e.preventDefault();
       }}
     >
-      Delete
+      rm
     </button>
   );
 }

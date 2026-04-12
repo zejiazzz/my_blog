@@ -32,72 +32,108 @@ export default function PostForm({ post, action }: PostFormProps) {
     setSlug(e.target.value);
   }
 
+  const labelStyle = {
+    display: 'block',
+    fontFamily: 'JetBrains Mono, monospace',
+    fontSize: '0.7rem',
+    color: 'var(--text-muted)',
+    marginBottom: '0.4rem',
+  };
+
   return (
-    <form action={action} className="space-y-5">
+    <form action={action} className="space-y-6">
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <label style={labelStyle}># title:</label>
         <input
           name="title"
           type="text"
           defaultValue={post?.title ?? ''}
           onChange={handleTitleChange}
           required
-          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="My awesome post"
+          className="input-dark"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Slug</label>
-        <input
-          name="slug"
-          type="text"
-          value={slug}
-          onChange={handleSlugChange}
-          required
-          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <label style={labelStyle}># slug:</label>
+        <div className="relative">
+          <span
+            className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-xs select-none"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            /posts/
+          </span>
+          <input
+            name="slug"
+            type="text"
+            value={slug}
+            onChange={handleSlugChange}
+            required
+            placeholder="my-awesome-post"
+            className="input-dark font-mono"
+            style={{ paddingLeft: '4.25rem' }}
+          />
+        </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+        <label style={labelStyle}># content:</label>
         <textarea
           name="content"
           defaultValue={post?.content ?? ''}
           required
-          rows={16}
-          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+          rows={18}
+          placeholder="Write your post here..."
+          className="input-dark font-mono"
+          style={{ resize: 'vertical', lineHeight: '1.7' }}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
+        <label style={labelStyle}># excerpt: <span style={{ color: 'var(--dim)' }}>(optional)</span></label>
         <textarea
           name="excerpt"
           defaultValue={post?.excerpt ?? ''}
           rows={3}
-          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Short description shown in post list..."
+          className="input-dark"
+          style={{ resize: 'vertical' }}
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <input
-          name="published"
-          type="checkbox"
-          id="published"
-          defaultChecked={post?.published ?? false}
-          className="h-4 w-4 rounded border-gray-300 text-blue-600"
-        />
-        <label htmlFor="published" className="text-sm font-medium text-gray-700">
-          Published
-        </label>
+      <div className="flex items-center gap-3 pt-1">
+        <div className="relative">
+          <input
+            name="published"
+            type="checkbox"
+            id="published"
+            defaultChecked={post?.published ?? false}
+            className="sr-only peer"
+          />
+          <label
+            htmlFor="published"
+            className="flex items-center gap-2 cursor-pointer select-none font-mono text-xs"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            <span
+              className="w-8 h-4 rounded-full flex items-center px-0.5 transition-colors peer-checked:bg-[var(--accent)] peer-checked:bg-opacity-80"
+              style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}
+            >
+              <span className="w-3 h-3 rounded-full bg-current transition-transform peer-checked:translate-x-4" />
+            </span>
+            publish immediately
+          </label>
+        </div>
       </div>
 
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
-      >
-        Save
-      </button>
+      {/* Divider */}
+      <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem' }}>
+        <button type="submit" className="btn-primary font-mono">
+          {post ? '→ update post' : '→ create post'}
+        </button>
+      </div>
     </form>
   );
 }

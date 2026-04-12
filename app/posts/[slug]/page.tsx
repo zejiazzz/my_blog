@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getAllPosts, getPostBySlug } from '@/lib/actions';
+import Link from 'next/link';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -23,10 +24,52 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <article>
-      <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
-      <p className="text-gray-500 text-sm mb-8">{date}</p>
-      <div className="prose prose-gray max-w-none whitespace-pre-wrap leading-relaxed text-gray-800">
+      {/* Back */}
+      <div className="mb-10">
+        <Link
+          href="/"
+          className="font-mono text-xs transition-colors"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          <span style={{ color: 'var(--accent)' }}>←</span> cd ..
+        </Link>
+      </div>
+
+      {/* Header */}
+      <header className="mb-10 pb-8" style={{ borderBottom: '1px solid var(--border)' }}>
+        <h1
+          className="text-2xl font-semibold leading-tight mb-4"
+          style={{ color: '#e2e8f8' }}
+        >
+          {post.title}
+        </h1>
+        <div className="flex items-center gap-3 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>
+          <span style={{ color: 'var(--accent-green)' }}>●</span>
+          <span>{date}</span>
+          <span style={{ color: 'var(--dim)' }}>·</span>
+          <span style={{ color: 'var(--dim)' }}>{post.slug}</span>
+        </div>
+      </header>
+
+      {/* Content */}
+      <div className="prose-dark whitespace-pre-wrap">
         {post.content}
+      </div>
+
+      {/* Footer */}
+      <div
+        className="mt-16 pt-8 font-mono text-xs flex items-center gap-2"
+        style={{ borderTop: '1px solid var(--border)', color: 'var(--text-muted)' }}
+      >
+        <span style={{ color: 'var(--dim)' }}>EOF</span>
+        <span style={{ color: 'var(--border-bright)' }}>—</span>
+        <Link
+          href="/"
+          style={{ color: 'var(--text-muted)' }}
+          className="hover:text-[var(--accent)] transition-colors"
+        >
+          back to index
+        </Link>
       </div>
     </article>
   );

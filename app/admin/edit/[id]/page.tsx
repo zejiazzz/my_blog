@@ -29,7 +29,12 @@ export default async function EditPostPage({ params }: Props) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-8">Edit Post</h1>
+      <div className="mb-8">
+        <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+          <span style={{ color: 'var(--accent-green)' }}>❯</span> vim {post.slug}.md
+        </p>
+        <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>Edit Post</h1>
+      </div>
       <PostForm post={post} action={updatePostAction} />
     </div>
   );

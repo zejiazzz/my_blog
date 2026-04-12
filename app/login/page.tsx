@@ -6,11 +6,13 @@ import { useRouter } from 'next/navigation';
 export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     const res = await fetch('/api/login', {
       method: 'POST',
@@ -18,35 +20,77 @@ export default function LoginPage() {
       body: JSON.stringify({ password }),
     });
 
+    setLoading(false);
     if (res.ok) {
       router.push('/admin');
     } else {
-      setError('Incorrect password.');
+      setError('Access denied.');
     }
   }
 
   return (
-    <div className="max-w-sm mx-auto mt-20">
-      <h1 className="text-2xl font-bold mb-6">Admin Login</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
+    <div className="min-h-[70vh] flex items-center justify-center">
+      <div className="w-full max-w-sm">
+        {/* Terminal window chrome */}
+        <div
+          className="rounded-t-lg px-4 py-2.5 flex items-center gap-2"
+          style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border)' }}
         >
-          Login
-        </button>
-      </form>
+          <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#f7768e' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#ff9e64' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#9ece6a' }} />
+          <span className="font-mono text-xs ml-2" style={{ color: 'var(--text-muted)' }}>
+            auth — bash
+          </span>
+        </div>
+
+        <div
+          className="p-6 rounded-b-lg"
+          style={{
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
+            borderTop: 'none',
+          }}
+        >
+          <p className="font-mono text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
+            <span style={{ color: 'var(--accent-green)' }}>❯</span>{' '}
+            <span style={{ color: 'var(--accent)' }}>sudo</span> access admin
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label
+                className="block font-mono text-xs mb-2"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                # password:
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                className="input-dark font-mono"
+              />
+            </div>
+
+            {error && (
+              <p className="font-mono text-xs" style={{ color: 'var(--accent-red)' }}>
+                <span>✗</span> {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full font-mono"
+            >
+              {loading ? 'authenticating...' : '→ login'}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
