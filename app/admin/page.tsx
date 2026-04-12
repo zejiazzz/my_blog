@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getAllPosts, deletePost } from '@/lib/actions';
 import { revalidatePath } from 'next/cache';
+import { DeleteButton } from './delete-button';
 
 export default async function AdminPage() {
   const posts = await getAllPosts();
@@ -59,15 +60,7 @@ export default async function AdminPage() {
                   </Link>
                   <form action={deletePostAction}>
                     <input type="hidden" name="id" value={post.id} />
-                    <button
-                      type="submit"
-                      className="text-red-600 hover:underline"
-                      onClick={(e) => {
-                        if (!confirm('Delete this post?')) e.preventDefault();
-                      }}
-                    >
-                      Delete
-                    </button>
+                    <DeleteButton postId={post.id} />
                   </form>
                 </td>
               </tr>
