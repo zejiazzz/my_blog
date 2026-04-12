@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Post } from '@/lib/actions';
+import { Post } from '@/lib/schema';
 
 function slugify(text: string): string {
   return text

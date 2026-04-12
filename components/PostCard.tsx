@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Post } from '@/lib/actions';
+import { Post } from '@/lib/schema';
 
 export default function PostCard({ post }: { post: Post }) {
   const preview = post.excerpt || post.content.slice(0, 150) + (post.content.length > 150 ? '...' : '');
