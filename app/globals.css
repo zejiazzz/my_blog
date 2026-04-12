@@ -195,3 +195,25 @@ body {
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* Nav */
+.nav-logo-text {
+  color: var(--text-muted);
+  transition: color 0.15s;
+}
+.nav-logo:hover .nav-logo-text {
+  color: var(--accent);
+}
+.cursor-blink {
+  background: var(--accent);
+  animation: blink 1.2s step-end infinite;
+  margin-bottom: -1px;
+}
+.nav-link {
+  color: var(--text-muted);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-link:hover {
+  color: var(--accent);
+  background: var(--accent-dim);
+}

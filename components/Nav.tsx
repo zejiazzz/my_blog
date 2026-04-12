@@ -9,50 +9,18 @@ export default function Nav() {
       }}
     >
       <div className="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between">
-        {/* Terminal-style logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <span
-            className="font-mono text-sm select-none"
-            style={{ color: 'var(--text-muted)' }}
-          >
+        <Link href="/" className="flex items-center gap-2 nav-logo">
+          <span className="font-mono text-sm select-none nav-logo-text">
             ~/blog
           </span>
-          <span
-            className="inline-block w-2 h-[0.9em] animate-blink align-middle"
-            style={{ background: 'var(--accent)', marginBottom: '-1px' }}
-          />
+          <span className="inline-block w-2 h-[0.9em] cursor-blink align-middle" />
         </Link>
 
-        {/* Nav links */}
         <div className="flex items-center gap-1">
-          <Link
-            href="/"
-            className="font-mono text-xs px-3 py-1.5 rounded transition-colors"
-            style={{ color: 'var(--text-muted)' }}
-            onMouseEnter={e => {
-              (e.target as HTMLElement).style.color = 'var(--accent)';
-              (e.target as HTMLElement).style.background = 'var(--accent-dim)';
-            }}
-            onMouseLeave={e => {
-              (e.target as HTMLElement).style.color = 'var(--text-muted)';
-              (e.target as HTMLElement).style.background = 'transparent';
-            }}
-          >
+          <Link href="/" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
             posts
           </Link>
-          <Link
-            href="/admin"
-            className="font-mono text-xs px-3 py-1.5 rounded transition-colors"
-            style={{ color: 'var(--text-muted)' }}
-            onMouseEnter={e => {
-              (e.target as HTMLElement).style.color = 'var(--accent)';
-              (e.target as HTMLElement).style.background = 'var(--accent-dim)';
-            }}
-            onMouseLeave={e => {
-              (e.target as HTMLElement).style.color = 'var(--text-muted)';
-              (e.target as HTMLElement).style.background = 'transparent';
-            }}
-          >
+          <Link href="/admin" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
             admin
           </Link>
         </div>
