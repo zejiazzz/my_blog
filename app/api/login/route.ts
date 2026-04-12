@@ -1,19 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { createClient } from '@/lib/supabase-server'
+import { NextResponse } from 'next/server'
 
-export async function POST(req: NextRequest) {
-  const { password } = await req.json();
+export async function POST(request: Request) {
+  const { email, password } = await request.json()
 
-  if (password !== process.env.ADMIN_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 401 })
   }
 
-  (await cookies()).set('admin_token', process.env.ADMIN_SECRET!, {
-    httpOnly: true,
-    path: '/',
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-  });
-
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ success: true })
 }

@@ -1,26 +1,39 @@
-import { notFound } from 'next/navigation';
-import { getAllPosts, getPostBySlug } from '@/lib/actions';
-import Link from 'next/link';
+import { notFound } from 'next/navigation'
+import { createClient } from '@/lib/supabase-server'
+import Link from 'next/link'
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts(true);
-  return posts.map((post) => ({ slug: post.slug }));
+  const supabase = await createClient()
+  const { data: posts } = await supabase
+    .from('posts')
+    .select('slug')
+    .eq('published', true)
+
+  return posts?.map((post) => ({ slug: post.slug })) || []
 }
 
 export default async function PostPage({ params }: Props) {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
-  if (!post) notFound();
+  const { slug } = await params
+  const supabase = await createClient()
 
-  const date = new Date(post.createdAt).toLocaleDateString('en-US', {
+  const { data: post } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('slug', slug)
+    .eq('published', true)
+    .single()
+
+  if (!post) notFound()
+
+  const date = new Date(post.created_at).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  });
+  })
 
   return (
     <article>
@@ -72,5 +85,5 @@ export default async function PostPage({ params }: Props) {
         </Link>
       </div>
     </article>
-  );
+  )
 }

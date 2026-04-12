@@ -1,8 +1,14 @@
-import { getAllPosts } from '@/lib/actions';
-import PostCard from '@/components/PostCard';
+import { createClient } from '@/lib/supabase-server'
+import PostCard from '@/components/PostCard'
 
 export default async function HomePage() {
-  const posts = await getAllPosts(true);
+  const supabase = await createClient()
+
+  const { data: posts } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('published', true)
+    .order('created_at', { ascending: false })
 
   return (
     <div>
@@ -15,11 +21,11 @@ export default async function HomePage() {
           Writing
         </h1>
         <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-          {posts.length} {posts.length === 1 ? 'entry' : 'entries'} found
+          {posts?.length || 0} {posts?.length === 1 ? 'entry' : 'entries'} found
         </p>
       </div>
 
-      {posts.length === 0 ? (
+      {!posts || posts.length === 0 ? (
         <div
           className="font-mono text-sm py-12 text-center"
           style={{ color: 'var(--text-muted)', border: '1px dashed var(--border)', borderRadius: '8px' }}
@@ -34,5 +40,5 @@ export default async function HomePage() {
         </div>
       )}
     </div>
-  );
+  )
 }

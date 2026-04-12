@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,14 +18,16 @@ export default function LoginPage() {
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ email, password }),
     });
 
     setLoading(false);
     if (res.ok) {
       router.push('/admin');
+      router.refresh();
     } else {
-      setError('Access denied.');
+      const data = await res.json();
+      setError(data.error || 'Access denied.');
     }
   }
 
@@ -58,6 +61,23 @@ export default function LoginPage() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label
+                className="block font-mono text-xs mb-2"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                # email:
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="admin@example.com"
+                className="input-dark font-mono"
+              />
+            </div>
+
             <div>
               <label
                 className="block font-mono text-xs mb-2"

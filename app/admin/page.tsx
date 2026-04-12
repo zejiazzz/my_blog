@@ -1,16 +1,49 @@
-import Link from 'next/link';
-import { getAllPosts, deletePost } from '@/lib/actions';
-import { revalidatePath } from 'next/cache';
-import { DeleteButton } from './delete-button';
+'use client'
 
-export default async function AdminPage() {
-  const posts = await getAllPosts();
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase'
+import type { Post } from '@/lib/types'
 
-  async function deletePostAction(formData: FormData) {
-    'use server';
-    const id = Number(formData.get('id'));
-    await deletePost(id);
-    revalidatePath('/admin');
+export default function AdminPage() {
+  const [posts, setPosts] = useState<Post[]>([])
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    loadPosts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  async function loadPosts() {
+    const { data } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    setPosts(data || [])
+    setLoading(false)
+  }
+
+  async function handleDelete(id: number) {
+    if (!confirm('Delete this post?')) return
+
+    const { error } = await supabase.from('posts').delete().eq('id', id)
+
+    if (error) {
+      alert('Failed to delete post')
+      return
+    }
+
+    setPosts(posts.filter((p) => p.id !== id))
+  }
+
+  if (loading) {
+    return (
+      <div className="font-mono text-sm" style={{ color: 'var(--text-muted)' }}>
+        Loading...
+      </div>
+    )
   }
 
   return (
@@ -81,8 +114,16 @@ export default async function AdminPage() {
                 className="font-mono text-xs px-2 py-0.5 rounded"
                 style={
                   post.published
-                    ? { background: 'rgba(158,206,106,0.1)', color: 'var(--accent-green)', border: '1px solid rgba(158,206,106,0.2)' }
-                    : { background: 'var(--bg-elevated)', color: 'var(--text-muted)', border: '1px solid var(--border)' }
+                    ? {
+                        background: 'rgba(158,206,106,0.1)',
+                        color: 'var(--accent-green)',
+                        border: '1px solid rgba(158,206,106,0.2)',
+                      }
+                    : {
+                        background: 'var(--bg-elevated)',
+                        color: 'var(--text-muted)',
+                        border: '1px solid var(--border)',
+                      }
                 }
               >
                 {post.published ? '● live' : '○ draft'}
@@ -96,15 +137,23 @@ export default async function AdminPage() {
                 >
                   edit
                 </Link>
-                <form action={deletePostAction}>
-                  <input type="hidden" name="id" value={post.id} />
-                  <DeleteButton postId={post.id} />
-                </form>
+                <button
+                  onClick={() => handleDelete(post.id)}
+                  className="transition-colors hover:underline"
+                  style={{
+                    color: 'var(--accent-red)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  rm
+                </button>
               </div>
             </div>
           ))}
         </div>
       )}
     </div>
-  );
+  )
 }

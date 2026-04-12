@@ -1,7 +1,9 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { Post } from '@/lib/schema';
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase'
+import type { Post } from '@/lib/types'
 
 function slugify(text: string): string {
   return text
@@ -9,27 +11,67 @@ function slugify(text: string): string {
     .trim()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/-+/g, '-')
 }
 
 interface PostFormProps {
-  post?: Post;
-  action: (formData: FormData) => Promise<void>;
+  post?: Post
 }
 
-export default function PostForm({ post, action }: PostFormProps) {
-  const [slug, setSlug] = useState(post?.slug ?? '');
-  const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!post?.slug);
+export default function PostForm({ post }: PostFormProps) {
+  const [slug, setSlug] = useState(post?.slug ?? '')
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!post?.slug)
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const supabase = createClient()
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!slugManuallyEdited) {
-      setSlug(slugify(e.target.value));
+      setSlug(slugify(e.target.value))
     }
   }
 
   function handleSlugChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSlugManuallyEdited(true);
-    setSlug(e.target.value);
+    setSlugManuallyEdited(true)
+    setSlug(e.target.value)
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setLoading(true)
+
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      title: formData.get('title') as string,
+      slug: formData.get('slug') as string,
+      content: formData.get('content') as string,
+      excerpt: (formData.get('excerpt') as string) || null,
+      published: formData.get('published') === 'on',
+    }
+
+    try {
+      if (post) {
+        // Update
+        const { error } = await supabase
+          .from('posts')
+          .update(data)
+          .eq('id', post.id)
+
+        if (error) throw error
+      } else {
+        // Create
+        const { error } = await supabase.from('posts').insert(data)
+        if (error) throw error
+      }
+
+      router.push('/admin')
+      router.refresh()
+    } catch (error) {
+      console.error('Error saving post:', error)
+      alert('Failed to save post')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const labelStyle = {
@@ -38,11 +80,10 @@ export default function PostForm({ post, action }: PostFormProps) {
     fontSize: '0.7rem',
     color: 'var(--text-muted)',
     marginBottom: '0.4rem',
-  };
+  }
 
   return (
-    <form action={action} className="space-y-6">
-
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label style={labelStyle}># title:</label>
         <input
@@ -92,7 +133,9 @@ export default function PostForm({ post, action }: PostFormProps) {
       </div>
 
       <div>
-        <label style={labelStyle}># excerpt: <span style={{ color: 'var(--dim)' }}>(optional)</span></label>
+        <label style={labelStyle}>
+          # excerpt: <span style={{ color: 'var(--dim)' }}>(optional)</span>
+        </label>
         <textarea
           name="excerpt"
           defaultValue={post?.excerpt ?? ''}
@@ -128,12 +171,11 @@ export default function PostForm({ post, action }: PostFormProps) {
         </div>
       </div>
 
-      {/* Divider */}
       <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem' }}>
-        <button type="submit" className="btn-primary font-mono">
-          {post ? '→ update post' : '→ create post'}
+        <button type="submit" disabled={loading} className="btn-primary font-mono">
+          {loading ? 'saving...' : post ? '→ update post' : '→ create post'}
         </button>
       </div>
     </form>
-  );
+  )
 }

@@ -1,37 +1,22 @@
-import Link from 'next/link';
-import { Post } from '@/lib/schema';
+import Link from 'next/link'
+import type { Post } from '@/lib/types'
 
 interface Props {
-  post: Post;
-  index?: number;
+  post: Post
+  index?: number
 }
 
 export default function PostCard({ post, index = 0 }: Props) {
-  const preview = post.excerpt || post.content.slice(0, 120) + (post.content.length > 120 ? '...' : '');
-  const date = new Date(post.createdAt).toLocaleDateString('en-US', {
+  const preview = post.excerpt || post.content.slice(0, 120) + (post.content.length > 120 ? '...' : '')
+  const date = new Date(post.created_at).toLocaleDateString('en-US', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }).replace(/\//g, '-');
+  }).replace(/\//g, '-')
 
   return (
     <Link href={`/posts/${post.slug}`} className="block group">
-      <article
-        className="px-4 py-4 rounded-lg transition-all duration-150"
-        style={{
-          borderLeft: '2px solid transparent',
-        }}
-        onMouseEnter={e => {
-          const el = e.currentTarget as HTMLElement;
-          el.style.background = 'var(--bg-card)';
-          el.style.borderLeftColor = 'var(--accent)';
-        }}
-        onMouseLeave={e => {
-          const el = e.currentTarget as HTMLElement;
-          el.style.background = 'transparent';
-          el.style.borderLeftColor = 'transparent';
-        }}
-      >
+      <article className="post-card px-4 py-4 rounded-lg">
         <div className="flex items-baseline justify-between gap-4">
           <h2
             className="font-medium text-sm leading-snug transition-colors"
@@ -57,5 +42,5 @@ export default function PostCard({ post, index = 0 }: Props) {
         )}
       </article>
     </Link>
-  );
+  )
 }
