@@ -1,14 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -23,8 +21,7 @@ export default function LoginPage() {
 
     setLoading(false);
     if (res.ok) {
-      router.push('/admin');
-      router.refresh();
+      window.location.href = '/admin';
     } else {
       const data = await res.json();
       setError(data.error || 'Access denied.');

@@ -1,6 +1,13 @@
-import Link from 'next/link';
+import Link from 'next/link'
+import { cookies } from 'next/headers'
+import LangSwitcher from './LangSwitcher'
+import { t, type Lang } from '@/lib/i18n'
 
-export default function Nav() {
+export default async function Nav() {
+  const cookieStore = await cookies()
+  const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
+  const nav = t[lang].nav
+
   return (
     <nav
       style={{
@@ -18,13 +25,17 @@ export default function Nav() {
 
         <div className="flex items-center gap-1">
           <Link href="/" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
-            posts
+            {nav.posts}
+          </Link>
+          <Link href="/about" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
+            {nav.about}
           </Link>
           <Link href="/admin" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
-            admin
+            {nav.admin}
           </Link>
+          <LangSwitcher current={lang} />
         </div>
       </div>
     </nav>
-  );
+  )
 }

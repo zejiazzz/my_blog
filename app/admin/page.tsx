@@ -58,9 +58,15 @@ export default function AdminPage() {
             Admin
           </h1>
         </div>
-        <Link href="/admin/new" className="btn-primary font-mono">
-          + new post
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/admin/about" className="font-mono text-xs px-3 py-1.5 rounded transition-colors"
+            style={{ border: '1px solid var(--border)', color: 'var(--text-muted)' }}>
+            edit about
+          </Link>
+          <Link href="/admin/new" className="btn-primary font-mono">
+            + new post
+          </Link>
+        </div>
       </div>
 
       {/* Posts table */}

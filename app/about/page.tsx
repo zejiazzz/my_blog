@@ -1,22 +1,31 @@
 import { createClient } from '@/lib/supabase-server'
 import { cookies } from 'next/headers'
-import PostCard from '@/components/PostCard'
+import Link from 'next/link'
 import { t, type Lang } from '@/lib/i18n'
 
-export default async function HomePage() {
+export const revalidate = 60
+
+export default async function AboutPage() {
   const cookieStore = await cookies()
   const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
-  const tr = t[lang].home
+  const tr = t[lang].about
 
   const supabase = await createClient()
-  const { data: posts } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('published', true)
-    .order('created_at', { ascending: false })
+  const { data } = await supabase.from('about_page').select('content, content_en').eq('id', 1).single()
+  const content = lang === 'zh' ? (data?.content || '') : (data?.content_en || '')
 
   return (
     <div>
+      <div className="mb-10">
+        <Link
+          href="/"
+          className="font-mono text-xs transition-colors"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          <span style={{ color: 'var(--accent)' }}>{tr.back}</span>
+        </Link>
+      </div>
+
       <div className="mb-12">
         <p className="font-mono text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
           <span style={{ color: 'var(--accent-green)' }}>{tr.cmd}</span>
@@ -24,23 +33,21 @@ export default async function HomePage() {
         <h1 className="text-2xl font-semibold tracking-tight" style={{ color: '#e2e8f8' }}>
           {tr.title}
         </h1>
-        <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-          {posts?.length || 0} {lang === 'zh' ? '篇' : (posts?.length === 1 ? 'entry' : 'entries')}
-        </p>
       </div>
 
-      {!posts || posts.length === 0 ? (
+      {content ? (
+        <div
+          className="whitespace-pre-wrap text-sm leading-relaxed"
+          style={{ color: 'var(--text)' }}
+        >
+          {content}
+        </div>
+      ) : (
         <div
           className="font-mono text-sm py-12 text-center"
           style={{ color: 'var(--text-muted)', border: '1px dashed var(--border)', borderRadius: '8px' }}
         >
           <span style={{ color: 'var(--accent-red)' }}>!</span> {tr.empty}
-        </div>
-      ) : (
-        <div className="space-y-1">
-          {posts.map((post, i) => (
-            <PostCard key={post.id} post={post} index={i} />
-          ))}
         </div>
       )}
     </div>

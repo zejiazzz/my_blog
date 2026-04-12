@@ -1,8 +1,14 @@
+import Link from 'next/link'
 import PostForm from '@/components/PostForm'
 
 export default function NewPostPage() {
   return (
     <div>
+      <div className="mb-8">
+        <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+          ← back
+        </Link>
+      </div>
       <div className="mb-8">
         <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
           <span style={{ color: 'var(--accent-green)' }}>❯</span> touch new-post.md

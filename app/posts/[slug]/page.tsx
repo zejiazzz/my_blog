@@ -45,9 +45,9 @@ export default async function PostPage({ params }: Props) {
         <Link
           href="/"
           className="font-mono text-xs transition-colors"
-          style={{ color: 'var(--text-muted)' }}
+          style={{ color: 'var(--accent)' }}
         >
-          <span style={{ color: 'var(--accent)' }}>←</span> cd ..
+          ← cd ..
         </Link>
       </div>
 

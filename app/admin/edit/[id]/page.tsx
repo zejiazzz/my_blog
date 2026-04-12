@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import PostForm from '@/components/PostForm'
@@ -45,6 +46,11 @@ export default function EditPostPage({ params }: Props) {
 
   return (
     <div>
+      <div className="mb-8">
+        <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+          ← back
+        </Link>
+      </div>
       <div className="mb-8">
         <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
           <span style={{ color: 'var(--accent-green)' }}>❯</span> vim {post.slug}.md
