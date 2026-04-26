@@ -1,45 +1,48 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase-server'
 import LangSwitcher from './LangSwitcher'
+import ThemeToggle from './ThemeToggle'
 import { t, type Lang } from '@/lib/i18n'
 
 export default async function Nav() {
   const cookieStore = await cookies()
   const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
   const nav = t[lang].nav
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   return (
-    <nav
-      style={{
-        background: 'var(--bg-card)',
-        borderBottom: '1px solid var(--border)',
-      }}
-    >
-      <div className="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 nav-logo">
-          <span className="font-mono text-sm select-none nav-logo-text">
-            ~/blog
-          </span>
-          <span className="inline-block w-2 h-[0.9em] cursor-blink align-middle" />
+    <nav className="nav-root">
+      <div className="nav-inner">
+        {/* Logo */}
+        <Link href="/" className="nav-logo">
+          <span className="nav-logo-dot" />
+          <span>~/blog</span>
+          <span className="cursor-blink" />
         </Link>
 
-        <div className="flex items-center gap-1">
-          <Link href="/" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
-            {nav.posts}
-          </Link>
-          <Link href="/about" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
-            {nav.about}
-          </Link>
-          <Link href="/skills" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
-            {nav.skills}
-          </Link>
-          <Link href="/mcp" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
-            {nav.mcp}
-          </Link>
-          <Link href="/admin" className="nav-link font-mono text-xs px-3 py-1.5 rounded">
-            {nav.admin}
-          </Link>
+        {/* Right side */}
+        <div className="nav-links">
+          <Link href="/" className="nav-link">{nav.posts}</Link>
+          <Link href="/about" className="nav-link">{nav.about}</Link>
+          <Link href="/skills" className="nav-link">{nav.skills}</Link>
+          <Link href="/mcp" className="nav-link">{nav.mcp}</Link>
+          <Link href="/admin" className="nav-link">{nav.admin}</Link>
+          {user && (
+            <form action="/api/logout" method="post" className="shrink-0">
+              <button type="submit" className="nav-action-btn">
+                {nav.logout}
+              </button>
+            </form>
+          )}
+
+          <span style={{ width: 1, height: 20, background: 'var(--border)', margin: '0 6px', flexShrink: 0 }} />
+
           <LangSwitcher current={lang} />
+          <ThemeToggle />
         </div>
       </div>
     </nav>

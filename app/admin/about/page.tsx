@@ -31,8 +31,10 @@ export default function AdminAboutPage() {
     setSaving(true)
     const { error } = await supabase
       .from('about_page')
-      .update({ content: contentZh, content_en: contentEn, updated_at: new Date().toISOString() })
-      .eq('id', 1)
+      .upsert(
+        { id: 1, content: contentZh, content_en: contentEn, updated_at: new Date().toISOString() },
+        { onConflict: 'id' }
+      )
 
     setSaving(false)
     if (error) {

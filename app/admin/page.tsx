@@ -18,26 +18,30 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [lang] = useState<Lang>(() => getLang())
   const tr = t[lang].admin
-  const supabase = createClient()
 
   useEffect(() => {
-    loadPosts()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    let cancelled = false
+    const supabase = createClient()
 
-  async function loadPosts() {
-    const { data } = await supabase
+    supabase
       .from('posts')
       .select('*')
       .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (cancelled) return
+        setPosts(data || [])
+        setLoading(false)
+      })
 
-    setPosts(data || [])
-    setLoading(false)
-  }
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   async function handleDelete(id: number) {
     if (!confirm(tr.deleteConfirm)) return
 
+    const supabase = createClient()
     const { error } = await supabase.from('posts').delete().eq('id', id)
 
     if (error) {

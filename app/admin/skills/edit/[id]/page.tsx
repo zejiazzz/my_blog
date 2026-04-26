@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
-import PostForm from '@/components/PostForm'
+import SkillForm from '@/components/SkillForm'
 import { t } from '@/lib/i18n'
-import type { Post } from '@/lib/types'
+import type { Skill } from '@/lib/types'
 import type { Lang } from '@/lib/i18n'
 
 function getLang(): Lang {
@@ -18,8 +18,8 @@ interface Props {
   params: Promise<{ id: string }>
 }
 
-export default function EditPostPage({ params }: Props) {
-  const [post, setPost] = useState<Post | null>(null)
+export default function EditSkillPage({ params }: Props) {
+  const [skill, setSkill] = useState<Skill | null>(null)
   const [loading, setLoading] = useState(true)
   const [lang] = useState<Lang>(() => getLang())
   const tr = t[lang].admin
@@ -28,15 +28,15 @@ export default function EditPostPage({ params }: Props) {
   useEffect(() => {
     params.then(async ({ id }) => {
       const { data } = await supabase
-        .from('posts')
+        .from('skills')
         .select('*')
         .eq('id', Number(id))
         .maybeSingle()
 
-      setPost(data ?? null)
+      setSkill(data ?? null)
       setLoading(false)
     }).catch(() => {
-      setPost(null)
+      setSkill(null)
       setLoading(false)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,18 +50,18 @@ export default function EditPostPage({ params }: Props) {
     )
   }
 
-  if (!post) {
+  if (!skill) {
     return (
       <div>
         <div className="mb-8">
-          <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+          <Link href="/admin/skills" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
             {tr.back}
           </Link>
         </div>
 
         <div className="empty-state" style={{ alignItems: 'flex-start', textAlign: 'left' }}>
           <span style={{ color: 'var(--accent-red)' }}>!</span>
-          <span>{tr.postNotFound}</span>
+          <span>{tr.skillNotFound}</span>
         </div>
       </div>
     )
@@ -70,19 +70,19 @@ export default function EditPostPage({ params }: Props) {
   return (
     <div>
       <div className="mb-8">
-        <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+        <Link href="/admin/skills" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
           {tr.back}
         </Link>
       </div>
       <div className="mb-8">
         <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-          <span style={{ color: 'var(--accent-green)' }}>❯</span> vim {post.slug}.md
+          <span style={{ color: 'var(--accent-green)' }}>❯</span> vim {skill.slug}.md
         </p>
         <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>
-          {tr.editPostTitle}
+          {tr.editSkillTitle}
         </h1>
       </div>
-      <PostForm post={post} lang={lang} />
+      <SkillForm skill={skill} lang={lang} />
     </div>
   )
 }

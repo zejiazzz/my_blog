@@ -14,68 +14,67 @@ export async function generateStaticParams() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
-  const { data: posts } = await supabase
-    .from('posts')
+  const { data: skills } = await supabase
+    .from('skills')
     .select('slug')
     .eq('published', true)
 
-  return posts?.map((post) => ({ slug: post.slug })) ?? []
+  return skills?.map((skill) => ({ slug: skill.slug })) ?? []
 }
 
-export default async function PostPage({ params }: Props) {
+export default async function SkillPage({ params }: Props) {
   const { slug } = await params
   const supabase = await createServerClient()
   const cookieStore = await cookies()
   const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
-  const tr = t[lang].post
+  const tr = t[lang].skills
 
-  const { data: post } = await supabase
-    .from('posts')
+  const { data: skill } = await supabase
+    .from('skills')
     .select('*')
     .eq('slug', slug)
     .eq('published', true)
     .single()
 
-  if (!post) notFound()
+  if (!skill) notFound()
 
-  const date = new Date(post.created_at).toLocaleDateString(
-    lang === 'zh' ? 'zh-CN' : 'en-US',
-    { year: 'numeric', month: 'long', day: 'numeric' }
-  )
+  const title = lang === 'zh' ? skill.title : skill.title_en || skill.title
+  const summary =
+    lang === 'zh'
+      ? skill.summary || skill.summary_en
+      : skill.summary_en || skill.summary
+  const content = lang === 'zh' ? skill.content : skill.content_en || skill.content
 
   return (
     <article>
-      <Link href="/" className="back-link">
+      <Link href="/skills" className="back-link">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M12 5l-7 7 7 7" />
         </svg>
         {tr.back}
       </Link>
 
-      {/* Article header */}
       <header className="article-header">
-        <h1 className="article-title">{post.title}</h1>
+        <h1 className="article-title">{title}</h1>
         <div className="article-meta">
           <span className="article-meta-dot" />
-          <span>{date}</span>
+          {skill.category && <span>{skill.category}</span>}
           <span style={{ color: 'var(--text-dim)' }}>·</span>
-          <span style={{ color: 'var(--text-muted)' }}>{post.slug}</span>
+          <span style={{ color: 'var(--text-muted)' }}>{skill.slug}</span>
         </div>
+        {summary && <p className="page-subtitle" style={{ marginTop: '1rem' }}>{summary}</p>}
+        {skill.tags.length > 0 && (
+          <div className="tag-row" style={{ marginTop: '1rem' }}>
+            {(skill.tags as string[]).map((tag) => (
+              <span key={tag} className="tag-chip">{tag}</span>
+            ))}
+          </div>
+        )}
       </header>
 
-      {/* Content */}
       <div className="prose-content" style={{ whiteSpace: 'pre-wrap' }}>
-        {post.content}
+        {content}
       </div>
-
-      {/* Footer */}
-      <footer className="article-footer">
-        <span style={{ color: 'var(--text-dim)', fontSize: '0.6875rem' }}>EOF</span>
-        <span style={{ color: 'var(--border)' }}>—</span>
-        <Link href="/" className="back-link" style={{ margin: 0 }}>
-          {tr.backToIndex}
-        </Link>
-      </footer>
     </article>
   )
 }

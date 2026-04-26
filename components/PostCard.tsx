@@ -7,7 +7,9 @@ interface Props {
 }
 
 export default function PostCard({ post, index = 0 }: Props) {
-  const preview = post.excerpt || post.content.slice(0, 120) + (post.content.length > 120 ? '...' : '')
+  const preview =
+    post.excerpt || post.content.slice(0, 120) + (post.content.length > 120 ? '…' : '')
+
   const date = new Date(post.created_at).toLocaleDateString('en-US', {
     year: 'numeric',
     month: '2-digit',
@@ -15,32 +17,18 @@ export default function PostCard({ post, index = 0 }: Props) {
   }).replace(/\//g, '-')
 
   return (
-    <Link href={`/posts/${post.slug}`} className="block group">
-      <article className="post-card px-4 py-4 rounded-lg">
-        <div className="flex items-baseline justify-between gap-4">
-          <h2
-            className="font-medium text-sm leading-snug transition-colors"
-            style={{ color: '#c9d1e0' }}
-          >
-            <span className="font-mono text-xs mr-2" style={{ color: 'var(--dim)' }}>
-              {String(index + 1).padStart(2, '0')}
-            </span>
-            <span className="group-hover:text-[#7aa2f7] transition-colors">{post.title}</span>
-          </h2>
-          <span
-            className="font-mono text-xs shrink-0"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            {date}
+    <Link href={`/posts/${post.slug}`} className="post-card">
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '1rem' }}>
+        <h2 className="post-card-title">
+          <span className="post-card-meta" style={{ marginRight: '0.625rem' }}>
+            {String(index + 1).padStart(2, '0')}
           </span>
-        </div>
+          {post.title}
+        </h2>
+        <span className="post-card-meta">{date}</span>
+      </div>
 
-        {preview && (
-          <p className="mt-1.5 text-xs leading-relaxed pl-8 line-clamp-2" style={{ color: 'var(--text-muted)' }}>
-            {preview}
-          </p>
-        )}
-      </article>
+      {preview && <p className="post-card-excerpt">{preview}</p>}
     </Link>
   )
 }

@@ -11,44 +11,33 @@ export default async function AboutPage() {
   const tr = t[lang].about
 
   const supabase = await createClient()
-  const { data } = await supabase.from('about_page').select('content, content_en').eq('id', 1).single()
+  const { data } = await supabase
+    .from('about_page')
+    .select('content, content_en')
+    .eq('id', 1)
+    .single()
+
   const content = lang === 'zh' ? (data?.content || '') : (data?.content_en || '')
 
   return (
     <div>
-      <div className="mb-10">
-        <Link
-          href="/"
-          className="font-mono text-xs transition-colors"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          <span style={{ color: 'var(--accent)' }}>{tr.back}</span>
-        </Link>
-      </div>
+      <Link href="/" className="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+        {tr.back}
+      </Link>
 
-      <div className="mb-12">
-        <p className="font-mono text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-          <span style={{ color: 'var(--accent-green)' }}>{tr.cmd}</span>
-        </p>
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ color: '#e2e8f8' }}>
-          {tr.title}
-        </h1>
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h1 className="page-title">{tr.title}</h1>
       </div>
 
       {content ? (
-        <div
-          className="whitespace-pre-wrap text-sm leading-relaxed"
-          style={{ color: 'var(--text)' }}
-        >
+        <div className="prose-content" style={{ whiteSpace: 'pre-wrap' }}>
           {content}
         </div>
       ) : (
-        <div
-          className="font-mono text-sm py-12 text-center"
-          style={{ color: 'var(--text-muted)', border: '1px dashed var(--border)', borderRadius: '8px' }}
-        >
-          <span style={{ color: 'var(--accent-red)' }}>!</span> {tr.empty}
-        </div>
+        <div className="empty-state">{tr.empty}</div>
       )}
     </div>
   )

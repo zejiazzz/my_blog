@@ -2,11 +2,18 @@
   "name": "my-blog",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "preview": "next start",
     "start": "next start",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint .",
+    "check-type": "tsc --noEmit",
+    "test:unit": "echo \"No unit tests configured yet\"",
+    "test:smoke": "echo \"No smoke tests configured yet\"",
+    "test:e2e": "echo \"No e2e tests configured yet\"",
+    "verify:knowledge": "node scripts/verify-knowledge.mjs",
     "prepare": "husky",
     "type-check": "tsc --noEmit"
   },
@@ -20,18 +27,20 @@
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.0",
-    "next": "^16.2.3",
+    "next": "^16.2.4",
     "react": "^18",
     "react-dom": "^18"
+  },
+  "overrides": {
+    "typescript-eslint": "8.46.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.0",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "16.2.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "postcss": "^8",

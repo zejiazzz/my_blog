@@ -15,11 +15,7 @@ export default function LangSwitcher({ current }: { current: Lang }) {
   }
 
   return (
-    <button
-      onClick={toggle}
-      className="nav-link font-mono text-xs px-3 py-1.5 rounded"
-      style={{ cursor: 'pointer', background: 'none', border: 'none' }}
-    >
+    <button onClick={toggle} className="lang-btn">
       {current === 'zh' ? 'EN' : '中'}
     </button>
   )

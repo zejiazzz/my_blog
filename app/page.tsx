@@ -15,30 +15,24 @@ export default async function HomePage() {
     .eq('published', true)
     .order('created_at', { ascending: false })
 
+  const count = posts?.length ?? 0
+
   return (
     <div>
-      <div className="mb-12">
-        <p className="font-mono text-xs mb-3" style={{ color: 'var(--text-muted)' }}>
-          <span style={{ color: 'var(--accent-green)' }}>{tr.cmd}</span>
-        </p>
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ color: '#e2e8f8' }}>
-          {tr.title}
-        </h1>
-        <p className="mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-          {posts?.length || 0} {lang === 'zh' ? '篇' : (posts?.length === 1 ? 'entry' : 'entries')}
+      {/* Header */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h1 className="page-title">{tr.title}</h1>
+        <p className="page-subtitle">
+          {count} {lang === 'zh' ? '篇文章' : count === 1 ? 'entry' : 'entries'}
         </p>
       </div>
 
-      {!posts || posts.length === 0 ? (
-        <div
-          className="font-mono text-sm py-12 text-center"
-          style={{ color: 'var(--text-muted)', border: '1px dashed var(--border)', borderRadius: '8px' }}
-        >
-          <span style={{ color: 'var(--accent-red)' }}>!</span> {tr.empty}
-        </div>
+      {/* List */}
+      {count === 0 ? (
+        <div className="empty-state">{tr.empty}</div>
       ) : (
-        <div className="space-y-1">
-          {posts.map((post, i) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {posts!.map((post, i) => (
             <PostCard key={post.id} post={post} index={i} />
           ))}
         </div>
