@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { createClient as createServerClient } from '@/lib/supabase-server'
+import { supabaseGlobalOptions } from '@/lib/supabase-fetch'
 import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
@@ -12,7 +13,10 @@ interface Props {
 export async function generateStaticParams() {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      global: supabaseGlobalOptions,
+    }
   )
   const { data: posts } = await supabase
     .from('posts')

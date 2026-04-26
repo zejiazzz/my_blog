@@ -1,25 +1,13 @@
 import { notFound } from 'next/navigation'
 import { createClient as createServerClient } from '@/lib/supabase-server'
-import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { t, type Lang } from '@/lib/i18n'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-  const { data: skills } = await supabase
-    .from('skills')
-    .select('slug')
-    .eq('published', true)
-
-  return skills?.map((skill) => ({ slug: skill.slug })) ?? []
 }
 
 export default async function SkillPage({ params }: Props) {

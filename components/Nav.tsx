@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { createClient } from '@/lib/supabase-server'
 import LangSwitcher from './LangSwitcher'
 import ThemeToggle from './ThemeToggle'
 import { t, type Lang } from '@/lib/i18n'
@@ -9,10 +8,9 @@ export default async function Nav() {
   const cookieStore = await cookies()
   const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
   const nav = t[lang].nav
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const hasAuthCookie = cookieStore
+    .getAll()
+    .some((cookie) => cookie.name.startsWith('sb-') && cookie.name.includes('auth-token'))
 
   return (
     <nav className="nav-root">
@@ -31,7 +29,7 @@ export default async function Nav() {
           <Link href="/skills" className="nav-link">{nav.skills}</Link>
           <Link href="/mcp" className="nav-link">{nav.mcp}</Link>
           <Link href="/admin" className="nav-link">{nav.admin}</Link>
-          {user && (
+          {hasAuthCookie && (
             <form action="/api/logout" method="post" className="shrink-0">
               <button type="submit" className="nav-action-btn">
                 {nav.logout}

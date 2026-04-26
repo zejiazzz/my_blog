@@ -232,8 +232,8 @@ values (
   'Next.js + Supabase 博客脚手架',
   'Next.js + Supabase Blog Blueprint',
   'next-supabase-blog-blueprint',
-  '以本项目为蓝本，快速搭建包含公开博客、Skills 知识库、后台管理、Supabase 数据库、认证、Spec 与 Harness 的个人知识库体系。',
-  'Use this project as a blueprint for a personal knowledge system with public blog pages, a Skills library, admin CRUD, Supabase data, auth, specs, and harness checks.',
+  '一套通用的 Next.js + Supabase 个人知识系统蓝图，用于搭建公开博客、Skills 知识库、后台管理、认证、Spec 与 Harness 验收闭环。',
+  'A reusable Next.js + Supabase blueprint for a personal knowledge system with public blog pages, a Skills library, admin CRUD, auth, specs, and harness checks.',
   '## 目标
 
 搭建一个个人博客与技能库一体化系统，但文章和 Skills 必须是两个独立内容体系。文章用于时间线写作，Skills 用于沉淀可复用的方法论、脚手架和工程蓝图。
