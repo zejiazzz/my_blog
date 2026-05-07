@@ -1,29 +1,13 @@
 import { notFound } from 'next/navigation'
 import { createClient as createServerClient } from '@/lib/supabase-server'
-import { supabaseGlobalOptions } from '@/lib/supabase-fetch'
-import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { t, type Lang } from '@/lib/i18n'
 
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      global: supabaseGlobalOptions,
-    }
-  )
-  const { data: posts } = await supabase
-    .from('posts')
-    .select('slug')
-    .eq('published', true)
-
-  return posts?.map((post) => ({ slug: post.slug })) ?? []
 }
 
 export default async function PostPage({ params }: Props) {
