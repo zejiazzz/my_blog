@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase-server'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { t, type Lang } from '@/lib/i18n'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 export const revalidate = 60
 
@@ -33,9 +34,7 @@ export default async function AboutPage() {
       </div>
 
       {content ? (
-        <div className="prose-content" style={{ whiteSpace: 'pre-wrap' }}>
-          {content}
-        </div>
+        <MarkdownRenderer content={content} />
       ) : (
         <div className="empty-state">{tr.empty}</div>
       )}

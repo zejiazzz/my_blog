@@ -9,19 +9,18 @@ export default async function NewPostPage() {
   const tr = t[lang].admin
 
   return (
-    <div>
+    <div className="admin-editor-page">
       <div className="mb-8">
-        <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+        <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
           {tr.back}
         </Link>
       </div>
-      <div className="mb-8">
-        <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-          <span style={{ color: 'var(--accent-green)' }}>❯</span> touch new-post.md
-        </p>
-        <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>
+      <div className="admin-page-hero">
+        <span className="admin-eyebrow">{tr.editorEyebrow}</span>
+        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>
           {tr.newPostTitle}
         </h1>
+        <p className="admin-page-copy">{tr.newPostDescription}</p>
       </div>
       <PostForm lang={lang} />
     </div>

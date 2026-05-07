@@ -3,6 +3,7 @@ import { createClient as createServerClient } from '@/lib/supabase-server'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { t, type Lang } from '@/lib/i18n'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 export const dynamic = 'force-dynamic'
 
@@ -60,9 +61,7 @@ export default async function SkillPage({ params }: Props) {
         )}
       </header>
 
-      <div className="prose-content" style={{ whiteSpace: 'pre-wrap' }}>
-        {content}
-      </div>
+      <MarkdownRenderer content={content} />
     </article>
   )
 }

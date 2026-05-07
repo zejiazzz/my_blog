@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import Nav from '@/components/Nav'
 import ThemeProvider from '@/components/ThemeProvider'
+import '@toast-ui/editor/dist/toastui-editor.css'
 import './globals.css'
 
 const geist = Geist({

@@ -9,19 +9,18 @@ export default async function NewSkillPage() {
   const tr = t[lang].admin
 
   return (
-    <div>
+    <div className="admin-editor-page">
       <div className="mb-8">
-        <Link href="/admin/skills" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+        <Link href="/admin/skills" className="back-link" style={{ marginBottom: 0 }}>
           {tr.back}
         </Link>
       </div>
-      <div className="mb-8">
-        <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-          <span style={{ color: 'var(--accent-green)' }}>❯</span> touch new-skill.md
-        </p>
-        <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>
+      <div className="admin-page-hero">
+        <span className="admin-eyebrow">Writing Studio</span>
+        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>
           {tr.newSkillTitle}
         </h1>
+        <p className="admin-page-copy">Create a skill card and its long-form notes in one place.</p>
       </div>
       <SkillForm lang={lang} />
     </div>

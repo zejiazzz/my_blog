@@ -8,6 +8,8 @@ export default async function Nav() {
   const cookieStore = await cookies()
   const lang: Lang = (cookieStore.get('lang')?.value as Lang) || 'zh'
   const nav = t[lang].nav
+  const brandLabel = lang === 'zh' ? '阅读札记' : 'Reading Notes'
+  const brandMeta = lang === 'zh' ? '随笔与文章' : 'Essays and articles'
   const hasAuthCookie = cookieStore
     .getAll()
     .some((cookie) => cookie.name.startsWith('sb-') && cookie.name.includes('auth-token'))
@@ -15,15 +17,43 @@ export default async function Nav() {
   return (
     <nav className="nav-root">
       <div className="nav-inner">
-        {/* Logo */}
-        <Link href="/" className="nav-logo">
-          <span className="nav-logo-dot" />
-          <span>~/blog</span>
-          <span className="cursor-blink" />
+        <Link
+          href="/"
+          className="nav-logo"
+          style={{
+            gap: '0.75rem',
+            alignItems: 'center',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: 999,
+              background: 'color-mix(in srgb, var(--accent) 16%, var(--bg-elevated))',
+              border: '1px solid color-mix(in srgb, var(--accent) 20%, var(--border))',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.75rem',
+              color: 'var(--accent)',
+              flexShrink: 0,
+            }}
+          >
+            ≡
+          </span>
+          <span style={{ display: 'flex', flexDirection: 'column', gap: 1, lineHeight: 1.2 }}>
+            <span style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text)' }}>
+              {brandLabel}
+            </span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+              {brandMeta}
+            </span>
+          </span>
         </Link>
 
-        {/* Right side */}
-        <div className="nav-links">
+        <div className="nav-links" style={{ gap: '0.25rem' }}>
           <Link href="/" className="nav-link">{nav.posts}</Link>
           <Link href="/about" className="nav-link">{nav.about}</Link>
           <Link href="/skills" className="nav-link">{nav.skills}</Link>
@@ -37,7 +67,16 @@ export default async function Nav() {
             </form>
           )}
 
-          <span style={{ width: 1, height: 20, background: 'var(--border)', margin: '0 6px', flexShrink: 0 }} />
+          <span
+            aria-hidden="true"
+            style={{
+              width: 1,
+              height: 18,
+              background: 'color-mix(in srgb, var(--border) 80%, transparent)',
+              margin: '0 8px',
+              flexShrink: 0,
+            }}
+          />
 
           <LangSwitcher current={lang} />
           <ThemeToggle />

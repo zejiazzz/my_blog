@@ -3,6 +3,7 @@ import { createClient as createServerClient } from '@/lib/supabase-server'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { t, type Lang } from '@/lib/i18n'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,23 +44,16 @@ export default async function PostPage({ params }: Props) {
       {/* Article header */}
       <header className="article-header">
         <h1 className="article-title">{post.title}</h1>
+        {post.excerpt && <p className="article-lead">{post.excerpt}</p>}
         <div className="article-meta">
           <span className="article-meta-dot" />
           <span>{date}</span>
-          <span style={{ color: 'var(--text-dim)' }}>·</span>
-          <span style={{ color: 'var(--text-muted)' }}>{post.slug}</span>
         </div>
       </header>
 
-      {/* Content */}
-      <div className="prose-content" style={{ whiteSpace: 'pre-wrap' }}>
-        {post.content}
-      </div>
+      <MarkdownRenderer content={post.content} />
 
-      {/* Footer */}
       <footer className="article-footer">
-        <span style={{ color: 'var(--text-dim)', fontSize: '0.6875rem' }}>EOF</span>
-        <span style={{ color: 'var(--border)' }}>—</span>
         <Link href="/" className="back-link" style={{ margin: 0 }}>
           {tr.backToIndex}
         </Link>

@@ -44,7 +44,7 @@ export default function EditSkillPage({ params }: Props) {
 
   if (loading) {
     return (
-      <div className="font-mono text-sm" style={{ color: 'var(--text-muted)' }}>
+      <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
         {tr.loading}
       </div>
     )
@@ -52,9 +52,9 @@ export default function EditSkillPage({ params }: Props) {
 
   if (!skill) {
     return (
-      <div>
+      <div className="admin-editor-page">
         <div className="mb-8">
-          <Link href="/admin/skills" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+          <Link href="/admin/skills" className="back-link" style={{ marginBottom: 0 }}>
             {tr.back}
           </Link>
         </div>
@@ -68,19 +68,18 @@ export default function EditSkillPage({ params }: Props) {
   }
 
   return (
-    <div>
+    <div className="admin-editor-page">
       <div className="mb-8">
-        <Link href="/admin/skills" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+        <Link href="/admin/skills" className="back-link" style={{ marginBottom: 0 }}>
           {tr.back}
         </Link>
       </div>
-      <div className="mb-8">
-        <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-          <span style={{ color: 'var(--accent-green)' }}>❯</span> vim {skill.slug}.md
-        </p>
-        <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>
+      <div className="admin-page-hero">
+        <span className="admin-eyebrow">Writing Studio</span>
+        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>
           {tr.editSkillTitle}
         </h1>
+        <p className="admin-page-copy">Adjust metadata, update the content, and keep both language versions aligned.</p>
       </div>
       <SkillForm skill={skill} lang={lang} />
     </div>

@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import path from 'node:path'
 
 const root = process.cwd()
@@ -15,9 +15,14 @@ const requiredPaths = [
   'docs/specs/blog/journeys.md',
   'docs/specs/blog/contracts.md',
   'docs/specs/blog/acceptance.md',
+  'docs/plans/README.md',
+  'docs/plans/active',
+  'docs/plans/archive',
+  'docs/plans/templates/feature-spec.template.md',
   'tests/harness/knowledge',
   'tests/harness/contracts',
   'tests/harness/journeys',
+  'tests/harness/README.md',
 ]
 
 const requiredScripts = [
@@ -49,6 +54,31 @@ function assertPath(relativePath) {
   }
 }
 
+function listMarkdownFiles(relativeDir) {
+  const absoluteDir = path.join(root, relativeDir)
+
+  return readdirSync(absoluteDir)
+    .filter((entry) => entry.endsWith('.md'))
+    .filter((entry) => statSync(path.join(absoluteDir, entry)).isFile())
+}
+
+function assertPlanStructure(relativePath) {
+  const content = readFileSync(path.join(root, relativePath), 'utf8')
+  const requiredSections = [
+    '## S · Situation',
+    '## T · Task',
+    '## A · Action',
+    '## R · Result',
+    '## L · Learning',
+  ]
+
+  for (const section of requiredSections) {
+    if (!content.includes(section)) {
+      throw new Error(`Plan missing required section "${section}": ${relativePath}`)
+    }
+  }
+}
+
 for (const requiredPath of [...requiredPaths, ...requiredRoutes]) {
   assertPath(requiredPath)
 }
@@ -64,6 +94,16 @@ const setupSql = readFileSync(path.join(root, 'supabase/setup.sql'), 'utf8')
 for (const table of ['public.posts', 'public.skills', 'public.about_page', 'public.mcp_page']) {
   if (!setupSql.includes(table)) {
     throw new Error(`Database setup does not mention ${table}`)
+  }
+}
+
+for (const relativeDir of ['docs/plans/active', 'docs/plans/archive']) {
+  for (const filename of listMarkdownFiles(relativeDir)) {
+    if (!filename.endsWith('-spec.md')) {
+      throw new Error(`Plan file must end with "-spec.md": ${path.posix.join(relativeDir, filename)}`)
+    }
+
+    assertPlanStructure(path.posix.join(relativeDir, filename))
   }
 }
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { t, type Lang } from '@/lib/i18n'
 import type { Post } from '@/lib/types'
+import MarkdownEditor from './MarkdownEditor'
 
 function slugify(text: string): string {
   return text
@@ -23,6 +24,7 @@ interface PostFormProps {
 export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
   const [slug, setSlug] = useState(post?.slug ?? '')
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!post?.slug)
+  const [content, setContent] = useState(post?.content ?? '')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
@@ -45,11 +47,17 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
 
     const formData = new FormData(e.currentTarget)
     const data = {
-      title: formData.get('title') as string,
-      slug: formData.get('slug') as string,
-      content: formData.get('content') as string,
+      title: (formData.get('title') as string).trim(),
+      slug: (formData.get('slug') as string).trim(),
+      content,
       excerpt: (formData.get('excerpt') as string) || null,
       published: formData.get('published') === 'on',
+    }
+
+    if (!data.content.trim()) {
+      alert(tr.contentRequired)
+      setLoading(false)
+      return
     }
 
     try {
@@ -77,16 +85,17 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
 
   const labelStyle = {
     display: 'block',
-    fontFamily: 'JetBrains Mono, monospace',
-    fontSize: '0.7rem',
+    fontSize: '0.82rem',
+    fontWeight: 600,
     color: 'var(--text-muted)',
-    marginBottom: '0.4rem',
+    marginBottom: '0.55rem',
+    letterSpacing: '-0.01em',
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label style={labelStyle}># title:</label>
+    <form onSubmit={handleSubmit} className="editor-form">
+      <div className="editor-field">
+        <label style={labelStyle}>{tr.formTitle}</label>
         <input
           name="title"
           type="text"
@@ -98,11 +107,11 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
         />
       </div>
 
-      <div>
-        <label style={labelStyle}># slug:</label>
+      <div className="editor-field">
+        <label style={labelStyle}>{tr.formSlug}</label>
         <div className="relative">
           <span
-            className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-xs select-none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-xs select-none"
             style={{ color: 'var(--text-muted)' }}
           >
             /posts/
@@ -114,28 +123,31 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
             onChange={handleSlugChange}
             required
             placeholder="my-awesome-post"
-            className="input-dark font-mono"
+            className="input-dark"
             style={{ paddingLeft: '4.25rem' }}
           />
         </div>
       </div>
 
-      <div>
-        <label style={labelStyle}># content:</label>
-        <textarea
-          name="content"
-          defaultValue={post?.content ?? ''}
-          required
-          rows={18}
-          placeholder="Write your post here..."
-          className="input-dark font-mono"
-          style={{ resize: 'vertical', lineHeight: '1.7' }}
+      <div className="editor-field">
+        <div className="editor-field-header">
+          <label style={labelStyle}>{tr.formContent}</label>
+          <span className="editor-field-tip">{tr.editorModes}</span>
+        </div>
+        <MarkdownEditor
+          value={content}
+          onChange={setContent}
+          placeholder={tr.editorPlaceholder}
         />
+        <p className="editor-helper-text">
+          {tr.editorHint}
+        </p>
       </div>
 
-      <div>
+      <div className="editor-field">
         <label style={labelStyle}>
-          # excerpt: <span style={{ color: 'var(--dim)' }}>(optional)</span>
+          {tr.formExcerpt}{' '}
+          <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>{tr.optional}</span>
         </label>
         <textarea
           name="excerpt"
@@ -147,7 +159,11 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
         />
       </div>
 
-      <div className="flex items-center gap-3 pt-1">
+      <div className="editor-panel">
+        <div className="editor-field-header">
+          <span style={labelStyle}>{tr.formPublish}</span>
+          <span className="editor-field-tip">{tr.publishHelp}</span>
+        </div>
         <div className="relative">
           <input
             name="published"
@@ -158,7 +174,7 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
           />
           <label
             htmlFor="published"
-            className="flex items-center gap-2 cursor-pointer select-none font-mono text-xs"
+            className="flex items-center gap-2 cursor-pointer select-none text-sm"
             style={{ color: 'var(--text-muted)' }}
           >
             <span
@@ -172,10 +188,11 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem' }}>
-        <button type="submit" disabled={loading} className="btn-primary font-mono">
+      <div className="editor-actions">
+        <button type="submit" disabled={loading} className="btn-primary">
           {loading ? tr.saving : post ? tr.updateBtn : tr.createBtn}
         </button>
+        <span className="editor-field-tip">{tr.saveFormat}</span>
       </div>
     </form>
   )

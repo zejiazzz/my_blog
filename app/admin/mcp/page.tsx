@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { t } from '@/lib/i18n'
 import type { Lang } from '@/lib/i18n'
+import MarkdownEditor from '@/components/MarkdownEditor'
 
 function getLang(): Lang {
   if (typeof document === 'undefined') return 'zh'
@@ -55,53 +56,46 @@ export default function AdminMcpPage() {
   }
 
   if (loading) {
-    return <div className="font-mono text-sm" style={{ color: 'var(--text-muted)' }}>{tr.loading}</div>
+    return <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{tr.loading}</div>
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-10">
-        <div>
-          <div className="mb-3">
-            <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
-              {tr.back}
-            </Link>
-          </div>
-          <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-            <span style={{ color: 'var(--accent-green)' }}>❯</span> vim ./mcp.md
-          </p>
-          <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>{tr.editMcpTitle}</h1>
-        </div>
-        <button onClick={handleSave} disabled={saving} className="btn-primary font-mono">
+    <div className="admin-editor-page">
+      <div className="mb-8">
+        <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
+          {tr.back}
+        </Link>
+      </div>
+      <div className="admin-page-hero">
+        <span className="admin-eyebrow">Writing Studio</span>
+        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>{tr.editMcpTitle}</h1>
+        <p className="admin-page-copy">Keep the tool notes focused, discoverable, and easy to scan.</p>
+      </div>
+      <div className="editor-actions" style={{ justifyContent: 'flex-end' }}>
+        <button onClick={handleSave} disabled={saving} className="btn-primary">
           {saving ? tr.saving : tr.save}
         </button>
       </div>
 
       <div className="space-y-6">
-        <div>
-          <label className="block font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-            # 中文内容
+        <div className="editor-field">
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+            中文内容
           </label>
-          <textarea
+          <MarkdownEditor
             value={contentZh}
-            onChange={(e) => setContentZh(e.target.value)}
+            onChange={setContentZh}
             placeholder="写 MCP 工具列表、配置说明..."
-            rows={15}
-            className="w-full font-mono text-sm p-4 rounded-lg resize-y"
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text)', outline: 'none', lineHeight: '1.7' }}
           />
         </div>
-        <div>
-          <label className="block font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-            # English content
+        <div className="editor-field">
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+            English content
           </label>
-          <textarea
+          <MarkdownEditor
             value={contentEn}
-            onChange={(e) => setContentEn(e.target.value)}
+            onChange={setContentEn}
             placeholder="Write MCP tools list, config notes..."
-            rows={15}
-            className="w-full font-mono text-sm p-4 rounded-lg resize-y"
-            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text)', outline: 'none', lineHeight: '1.7' }}
           />
         </div>
       </div>

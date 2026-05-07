@@ -54,60 +54,53 @@ export default function AdminSkillsPage() {
   }
 
   if (loading) {
-    return <div className="font-mono text-sm" style={{ color: 'var(--text-muted)' }}>{tr.loading}</div>
+    return <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{tr.loading}</div>
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-10">
-        <div>
+    <div className="admin-shell">
+      <div className="admin-header">
+        <div className="admin-page-hero" style={{ marginBottom: 0 }}>
           <div className="mb-3">
-            <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
+            <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
               {tr.back}
             </Link>
           </div>
-          <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-            <span style={{ color: 'var(--accent-green)' }}>❯</span> ls -la ./skills --all
-          </p>
-          <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>{tr.editSkillsTitle}</h1>
+          <span className="admin-eyebrow">Writing Studio</span>
+          <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>{tr.editSkillsTitle}</h1>
+          <p className="admin-page-copy">Manage skill pages, metadata, and the long-form notes behind each card.</p>
         </div>
-        <Link href="/admin/skills/new" className="btn-primary font-mono">
+        <Link href="/admin/skills/new" className="btn-primary">
           {tr.newSkill}
         </Link>
       </div>
 
       {skills.length === 0 ? (
-        <div className="empty-state" style={{ alignItems: 'flex-start', textAlign: 'left' }}>
-          <span style={{ color: 'var(--accent-red)' }}>!</span>
-          <span>{t[lang].skills.empty}</span>
-        </div>
+        <div className="empty-state">{t[lang].skills.empty}</div>
       ) : (
-        <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--border)' }}>
-          <div className="grid grid-cols-[1fr_auto_auto] gap-4 px-5 py-2.5 font-mono text-xs" style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border)', color: 'var(--text-muted)' }}>
+        <div className="admin-table">
+          <div className="admin-table-head">
             <span>{tr.title}</span>
             <span>{tr.status}</span>
             <span>{tr.actions}</span>
           </div>
 
           {skills.map((skill, i) => (
-            <div key={skill.id} className="grid grid-cols-[1fr_auto_auto] gap-4 items-center px-5 py-3.5" style={{ background: i % 2 === 0 ? 'var(--bg-card)' : 'transparent', borderBottom: i < skills.length - 1 ? '1px solid var(--border)' : 'none' }}>
-              <span className="text-sm font-medium truncate" style={{ color: '#c9d1e0' }}>
-                <span className="font-mono text-xs mr-2" style={{ color: 'var(--dim)' }}>
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+            <div key={skill.id} className="admin-table-row" style={{ borderBottom: i < skills.length - 1 ? '1px solid var(--border)' : 'none' }}>
+              <span className="text-sm font-medium truncate" style={{ color: 'var(--text)' }}>
                 {skill.title}
               </span>
 
-              <span className="font-mono text-xs px-2 py-0.5 rounded" style={skill.published ? { background: 'rgba(158,206,106,0.1)', color: 'var(--accent-green)', border: '1px solid rgba(158,206,106,0.2)' } : { background: 'var(--bg-elevated)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>
+              <span className="badge" style={skill.published ? { background: 'color-mix(in srgb, var(--accent-green) 14%, transparent)', color: 'var(--accent-green)' } : { background: 'var(--bg-elevated)', color: 'var(--text-muted)' }}>
                 {skill.published ? tr.live : tr.draft}
               </span>
 
-              <div className="flex items-center gap-3 font-mono text-xs">
+              <div className="admin-table-actions">
                 <Link href={`/admin/skills/edit/${skill.id}`} style={{ color: 'var(--accent)' }} className="hover:underline">
-                  edit
+                  {lang === 'zh' ? '编辑' : 'Edit'}
                 </Link>
                 <button onClick={() => handleDelete(skill.id)} className="transition-colors hover:underline" style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                  rm
+                  {lang === 'zh' ? '删除' : 'Delete'}
                 </button>
               </div>
             </div>

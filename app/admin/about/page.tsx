@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import MarkdownEditor from '@/components/MarkdownEditor'
 
 export default function AdminAboutPage() {
   const [contentZh, setContentZh] = useState('')
@@ -45,66 +46,47 @@ export default function AdminAboutPage() {
   }
 
   if (loading) {
-    return <div className="font-mono text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</div>
+    return <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</div>
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-10">
-        <div>
-          <div className="mb-3">
-            <Link href="/admin" className="font-mono text-xs" style={{ color: 'var(--accent)' }}>
-              ← back
-            </Link>
-          </div>
-          <p className="font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-            <span style={{ color: 'var(--accent-green)' }}>❯</span> vim ./about.md
-          </p>
-          <h1 className="text-2xl font-semibold" style={{ color: '#e2e8f8' }}>Edit About</h1>
-        </div>
-        <button onClick={handleSave} disabled={saving} className="btn-primary font-mono">
+    <div className="admin-editor-page">
+      <div className="mb-8">
+        <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
+          ← back
+        </Link>
+      </div>
+      <div className="admin-page-hero">
+        <span className="admin-eyebrow">Writing Studio</span>
+        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>Edit About</h1>
+        <p className="admin-page-copy">Keep the biography page concise, readable, and easy to update.</p>
+      </div>
+      <div className="editor-actions" style={{ justifyContent: 'flex-end' }}>
+        <button onClick={handleSave} disabled={saving} className="btn-primary">
           {saving ? 'saving...' : 'save'}
         </button>
       </div>
 
       <div className="space-y-6">
-        <div>
-          <label className="block font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-            # 中文内容
+        <div className="editor-field">
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+            中文内容
           </label>
-          <textarea
+          <MarkdownEditor
             value={contentZh}
-            onChange={(e) => setContentZh(e.target.value)}
+            onChange={setContentZh}
             placeholder="写中文简介 / 简历..."
-            rows={15}
-            className="w-full font-mono text-sm p-4 rounded-lg resize-y"
-            style={{
-              background: 'var(--bg-elevated)',
-              border: '1px solid var(--border)',
-              color: 'var(--text)',
-              outline: 'none',
-              lineHeight: '1.7',
-            }}
           />
         </div>
 
-        <div>
-          <label className="block font-mono text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-            # English content
+        <div className="editor-field">
+          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+            English content
           </label>
-          <textarea
+          <MarkdownEditor
             value={contentEn}
-            onChange={(e) => setContentEn(e.target.value)}
+            onChange={setContentEn}
             placeholder="Write English bio / resume..."
-            rows={15}
-            className="w-full font-mono text-sm p-4 rounded-lg resize-y"
-            style={{
-              background: 'var(--bg-elevated)',
-              border: '1px solid var(--border)',
-              color: 'var(--text)',
-              outline: 'none',
-              lineHeight: '1.7',
-            }}
           />
         </div>
       </div>
