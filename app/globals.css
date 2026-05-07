@@ -1123,7 +1123,8 @@ textarea,
   pointer-events: none;
 }
 
-.editor-slug-control {
+.input-dark.editor-slug-control {
+  /* 覆盖通用输入框内边距，给固定前缀预留可读空间。 */
   padding-left: 4.7rem;
 }
 
