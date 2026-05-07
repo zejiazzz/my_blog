@@ -159,4 +159,4 @@ npm run build
   - 暂不回写；待实现完成后，如果“公开阅读容器 / 后台编辑容器分离”成为稳定模式，再回写到项目规则或长期 spec。
 - 模块知识是否需要同步到 `docs/specs/`：
   - 如实现完成且结构稳定，建议把“公开阅读壳层规则”和“后台写作工作台规则”同步到 `docs/specs/blog/overview.md` 或新的 UI 章节。
-- spec 处置结论：`keep`
+- spec 处置结论：`archive`
