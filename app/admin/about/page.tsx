@@ -5,12 +5,22 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import MarkdownEditor from '@/components/MarkdownEditor'
+import { t } from '@/lib/i18n'
+import type { Lang } from '@/lib/i18n'
+
+function getLang(): Lang {
+  if (typeof document === 'undefined') return 'zh'
+  const match = document.cookie.match(/(?:^|;\s*)lang=([^;]*)/)
+  return (match?.[1] as Lang) || 'zh'
+}
 
 export default function AdminAboutPage() {
   const [contentZh, setContentZh] = useState('')
   const [contentEn, setContentEn] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [lang] = useState<Lang>(() => getLang())
+  const tr = t[lang].admin
   const supabase = createClient()
   const router = useRouter()
 
@@ -46,7 +56,7 @@ export default function AdminAboutPage() {
   }
 
   if (loading) {
-    return <div className="page-shell page-shell--editor text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</div>
+    return <div className="page-shell page-shell--editor text-sm" style={{ color: 'var(--text-muted)' }}>{tr.loading}</div>
   }
 
   return (
@@ -54,17 +64,19 @@ export default function AdminAboutPage() {
       <div className="admin-editor-page">
         <div>
           <Link href="/admin" className="back-link back-link--inline">
-            ← back
+            {tr.back}
           </Link>
         </div>
         <div className="admin-page-hero">
-          <span className="admin-eyebrow">Writing Studio</span>
-          <h1 className="page-title page-title--admin">Edit About</h1>
-          <p className="admin-page-copy">Keep the biography page concise, readable, and easy to update.</p>
+          <span className="admin-eyebrow">{tr.editorEyebrow}</span>
+          <h1 className="page-title page-title--admin">{tr.editAboutTitle}</h1>
+          <p className="admin-page-copy">
+            {lang === 'zh' ? '保持关于页简介精炼、易读，也方便后续持续更新。' : 'Keep the biography page concise, readable, and easy to update.'}
+          </p>
         </div>
         <div className="editor-actions editor-actions--end">
           <button onClick={handleSave} disabled={saving} className="btn-primary">
-            {saving ? 'saving...' : 'save'}
+            {saving ? tr.saving : tr.save}
           </button>
         </div>
 
@@ -77,6 +89,7 @@ export default function AdminAboutPage() {
               value={contentZh}
               onChange={setContentZh}
               placeholder="写中文简介 / 简历..."
+              lang={lang}
             />
           </div>
 
@@ -88,6 +101,7 @@ export default function AdminAboutPage() {
               value={contentEn}
               onChange={setContentEn}
               placeholder="Write English bio / resume..."
+              lang={lang}
             />
           </div>
         </div>

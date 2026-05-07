@@ -1221,6 +1221,14 @@ textarea,
   background: var(--bg-strong);
 }
 
+.editor-shell .toastui-editor-toolbar button,
+.editor-shell .toastui-editor-mode-switch .tab-item,
+.editor-shell .toastui-editor-popup label,
+.editor-shell .toastui-editor-popup p,
+.editor-shell .toastui-editor-popup span {
+  color: var(--text-secondary);
+}
+
 .editor-shell .toastui-editor-contents,
 .editor-shell .ProseMirror,
 .editor-shell .toastui-editor-md-preview {
@@ -1228,6 +1236,94 @@ textarea,
   color: var(--text);
   font-size: 1rem;
   line-height: 1.92;
+}
+
+.editor-shell .toastui-editor-contents p,
+.editor-shell .toastui-editor-contents li,
+.editor-shell .toastui-editor-contents blockquote,
+.editor-shell .toastui-editor-contents table,
+.editor-shell .toastui-editor-contents thead,
+.editor-shell .toastui-editor-contents tbody,
+.editor-shell .toastui-editor-contents tr,
+.editor-shell .toastui-editor-contents th,
+.editor-shell .toastui-editor-contents td,
+.editor-shell .toastui-editor-contents span,
+.editor-shell .toastui-editor-contents strong,
+.editor-shell .toastui-editor-contents em,
+.editor-shell .toastui-editor-contents code,
+.editor-shell .toastui-editor-md-preview p,
+.editor-shell .toastui-editor-md-preview li,
+.editor-shell .toastui-editor-md-preview blockquote,
+.editor-shell .toastui-editor-md-preview table,
+.editor-shell .toastui-editor-md-preview thead,
+.editor-shell .toastui-editor-md-preview tbody,
+.editor-shell .toastui-editor-md-preview tr,
+.editor-shell .toastui-editor-md-preview th,
+.editor-shell .toastui-editor-md-preview td,
+.editor-shell .toastui-editor-md-preview span,
+.editor-shell .toastui-editor-md-preview strong,
+.editor-shell .toastui-editor-md-preview em,
+.editor-shell .toastui-editor-md-preview code,
+.editor-shell .ProseMirror p,
+.editor-shell .ProseMirror li,
+.editor-shell .ProseMirror blockquote,
+.editor-shell .ProseMirror table,
+.editor-shell .ProseMirror thead,
+.editor-shell .ProseMirror tbody,
+.editor-shell .ProseMirror tr,
+.editor-shell .ProseMirror th,
+.editor-shell .ProseMirror td,
+.editor-shell .ProseMirror span,
+.editor-shell .ProseMirror strong,
+.editor-shell .ProseMirror em,
+.editor-shell .ProseMirror code {
+  color: var(--text);
+}
+
+.editor-shell .toastui-editor-contents a,
+.editor-shell .toastui-editor-md-preview a,
+.editor-shell .ProseMirror a {
+  color: var(--accent);
+}
+
+.editor-shell .toastui-editor-contents blockquote,
+.editor-shell .toastui-editor-md-preview blockquote,
+.editor-shell .ProseMirror blockquote {
+  border-left-color: var(--border-strong);
+  color: var(--text-secondary);
+}
+
+.editor-shell .toastui-editor-contents pre,
+.editor-shell .toastui-editor-contents code,
+.editor-shell .toastui-editor-md-preview pre,
+.editor-shell .toastui-editor-md-preview code,
+.editor-shell .ProseMirror pre,
+.editor-shell .ProseMirror code {
+  background: color-mix(in srgb, var(--bg-subtle) 88%, transparent);
+  color: var(--text);
+}
+
+.editor-shell .toastui-editor-contents th,
+.editor-shell .toastui-editor-contents td,
+.editor-shell .toastui-editor-md-preview th,
+.editor-shell .toastui-editor-md-preview td,
+.editor-shell .ProseMirror th,
+.editor-shell .ProseMirror td,
+.editor-shell .toastui-editor-contents hr,
+.editor-shell .toastui-editor-md-preview hr,
+.editor-shell .ProseMirror hr {
+  border-color: var(--border);
+}
+
+.editor-shell .toastui-editor-md-container .CodeMirror,
+.editor-shell .toastui-editor-md-container .CodeMirror-lines,
+.editor-shell .toastui-editor-md-container .CodeMirror pre {
+  background: transparent;
+  color: var(--text);
+}
+
+.editor-shell .ProseMirror .placeholder {
+  color: var(--text-muted);
 }
 
 .editor-shell .toastui-editor-contents,
@@ -1258,6 +1354,17 @@ textarea,
   border: 1px solid var(--border);
   border-radius: 18px;
   box-shadow: var(--shadow-md);
+}
+
+.editor-shell .toastui-editor-popup-body,
+.editor-shell .toastui-editor-popup-body input,
+.editor-shell .toastui-editor-popup-body button {
+  color: var(--text);
+}
+
+.editor-shell .toastui-editor-popup-body input {
+  background: var(--bg-subtle);
+  border-color: var(--border);
 }
 
 .cursor-blink {

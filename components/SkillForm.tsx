@@ -162,6 +162,7 @@ export default function SkillForm({ skill, lang = 'zh' }: SkillFormProps) {
           value={content}
           onChange={setContent}
           placeholder={lang === 'zh' ? '写技能说明、步骤或示例...' : 'Write the skill notes, steps, or examples...'}
+          lang={lang}
         />
       </div>
 
@@ -174,6 +175,7 @@ export default function SkillForm({ skill, lang = 'zh' }: SkillFormProps) {
           value={contentEn}
           onChange={setContentEn}
           placeholder={lang === 'zh' ? '写英文说明...' : 'Write the English notes...'}
+          lang={lang}
         />
       </div>
 

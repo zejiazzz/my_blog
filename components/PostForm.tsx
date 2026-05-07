@@ -108,6 +108,7 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
             value={content}
             onChange={setContent}
             placeholder={tr.editorPlaceholder}
+            lang={lang}
           />
           <p className="editor-helper-text">
             {tr.editorHint}

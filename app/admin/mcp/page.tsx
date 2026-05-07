@@ -87,6 +87,7 @@ export default function AdminMcpPage() {
               value={contentZh}
               onChange={setContentZh}
               placeholder="写 MCP 工具列表、配置说明..."
+              lang={lang}
             />
           </div>
           <div className="editor-field">
@@ -97,6 +98,7 @@ export default function AdminMcpPage() {
               value={contentEn}
               onChange={setContentEn}
               placeholder="Write MCP tools list, config notes..."
+              lang={lang}
             />
           </div>
         </div>
