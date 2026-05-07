@@ -29,11 +29,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center">
-      <div className="w-full max-w-md editor-field" style={{ padding: '2rem' }}>
-        <div className="admin-page-hero" style={{ marginBottom: '1.5rem' }}>
+    <div className="page-shell page-shell--editor auth-shell">
+      <div className="auth-card">
+        <div className="admin-page-hero auth-hero">
           <span className="admin-eyebrow">Editorial Access</span>
-          <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>
+          <h1 className="page-title page-title--admin">
             Sign in to the dashboard
           </h1>
           <p className="admin-page-copy">
@@ -42,8 +42,8 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="editor-form">
-          <div className="editor-field" style={{ padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }}>
-            <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+          <div className="editor-field editor-field--plain">
+            <label className="field-label">
               Email
             </label>
             <input
@@ -56,8 +56,8 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="editor-field" style={{ padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }}>
-            <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+          <div className="editor-field editor-field--plain">
+            <label className="field-label">
               Password
             </label>
             <input

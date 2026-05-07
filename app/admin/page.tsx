@@ -54,87 +54,91 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
-        {tr.loading}
+      <div className="page-shell page-shell--editor">
+        <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          {tr.loading}
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="admin-shell">
-      <div className="admin-header">
-        <div className="admin-page-hero" style={{ marginBottom: 0 }}>
-          <span className="admin-eyebrow">{tr.editorEyebrow}</span>
-          <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>
-            {tr.adminTitle}
-          </h1>
-          <p className="admin-page-copy">{tr.adminDescription}</p>
-        </div>
-        <div className="admin-header-actions">
-          <Link href="/admin/about" className="btn-ghost">
-            {tr.editAbout}
-          </Link>
-          <Link href="/admin/skills" className="btn-ghost">
-            {tr.editSkills}
-          </Link>
-          <Link href="/admin/mcp" className="btn-ghost">
-            {tr.editMcp}
-          </Link>
-          <Link href="/admin/new" className="btn-primary">
-            {tr.newPost}
-          </Link>
-        </div>
-      </div>
-
-      {posts.length === 0 ? (
-        <div className="empty-state">{tr.noPosts}</div>
-      ) : (
-        <div className="admin-table">
-          <div
-            className="admin-table-head"
-          >
-            <span>{tr.title}</span>
-            <span>{tr.status}</span>
-            <span>{tr.actions}</span>
+    <div className="page-shell page-shell--editor">
+      <div className="admin-shell">
+        <div className="admin-header">
+          <div className="admin-page-hero admin-page-hero--wide">
+            <span className="admin-eyebrow">{tr.editorEyebrow}</span>
+            <h1 className="page-title page-title--admin">
+              {tr.adminTitle}
+            </h1>
+            <p className="admin-page-copy">{tr.adminDescription}</p>
           </div>
-
-          {posts.map((post, i) => (
-            <div
-              key={post.id}
-              className="admin-table-row"
-              style={{ borderBottom: i < posts.length - 1 ? '1px solid var(--border)' : 'none' }}
-            >
-              <span className="text-sm font-medium truncate" style={{ color: 'var(--text)' }}>
-                {post.title}
-              </span>
-
-              <span
-                className="badge"
-                style={
-                  post.published
-                    ? { background: 'color-mix(in srgb, var(--accent-green) 14%, transparent)', color: 'var(--accent-green)' }
-                    : { background: 'var(--bg-elevated)', color: 'var(--text-muted)' }
-                }
-              >
-                {post.published ? tr.live : tr.draft}
-              </span>
-
-              <div className="admin-table-actions">
-                <Link href={`/admin/edit/${post.id}`} style={{ color: 'var(--accent)' }} className="hover:underline">
-                  {tr.editAction}
-                </Link>
-                <button
-                  onClick={() => handleDelete(post.id)}
-                  className="transition-colors hover:underline"
-                  style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer' }}
-                >
-                  {tr.deleteAction}
-                </button>
-              </div>
-            </div>
-          ))}
+          <div className="admin-header-actions">
+            <Link href="/admin/about" className="btn-ghost">
+              {tr.editAbout}
+            </Link>
+            <Link href="/admin/skills" className="btn-ghost">
+              {tr.editSkills}
+            </Link>
+            <Link href="/admin/mcp" className="btn-ghost">
+              {tr.editMcp}
+            </Link>
+            <Link href="/admin/new" className="btn-primary">
+              {tr.newPost}
+            </Link>
+          </div>
         </div>
-      )}
+
+        {posts.length === 0 ? (
+          <div className="empty-state">{tr.noPosts}</div>
+        ) : (
+          <div className="admin-table">
+            <div
+              className="admin-table-head"
+            >
+              <span>{tr.title}</span>
+              <span>{tr.status}</span>
+              <span>{tr.actions}</span>
+            </div>
+
+            {posts.map((post, i) => (
+              <div
+                key={post.id}
+                className="admin-table-row"
+                style={{ borderBottom: i < posts.length - 1 ? '1px solid var(--border)' : 'none' }}
+              >
+                <span className="text-sm font-medium truncate" style={{ color: 'var(--text)' }}>
+                  {post.title}
+                </span>
+
+                <span
+                  className="badge"
+                  style={
+                    post.published
+                      ? { background: 'color-mix(in srgb, var(--accent-green) 14%, transparent)', color: 'var(--accent-green)' }
+                      : { background: 'var(--bg-elevated)', color: 'var(--text-muted)' }
+                  }
+                >
+                  {post.published ? tr.live : tr.draft}
+                </span>
+
+                <div className="admin-table-actions">
+                  <Link href={`/admin/edit/${post.id}`} style={{ color: 'var(--accent)' }} className="hover:underline">
+                    {tr.editAction}
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(post.id)}
+                    className="transition-colors hover:underline"
+                    style={{ color: 'var(--accent-red)', background: 'none', border: 'none', cursor: 'pointer' }}
+                  >
+                    {tr.deleteAction}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

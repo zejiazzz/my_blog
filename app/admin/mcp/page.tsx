@@ -56,47 +56,49 @@ export default function AdminMcpPage() {
   }
 
   if (loading) {
-    return <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{tr.loading}</div>
+    return <div className="page-shell page-shell--editor text-sm" style={{ color: 'var(--text-muted)' }}>{tr.loading}</div>
   }
 
   return (
-    <div className="admin-editor-page">
-      <div className="mb-8">
-        <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
-          {tr.back}
-        </Link>
-      </div>
-      <div className="admin-page-hero">
-        <span className="admin-eyebrow">Writing Studio</span>
-        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>{tr.editMcpTitle}</h1>
-        <p className="admin-page-copy">Keep the tool notes focused, discoverable, and easy to scan.</p>
-      </div>
-      <div className="editor-actions" style={{ justifyContent: 'flex-end' }}>
-        <button onClick={handleSave} disabled={saving} className="btn-primary">
-          {saving ? tr.saving : tr.save}
-        </button>
-      </div>
-
-      <div className="space-y-6">
-        <div className="editor-field">
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
-            中文内容
-          </label>
-          <MarkdownEditor
-            value={contentZh}
-            onChange={setContentZh}
-            placeholder="写 MCP 工具列表、配置说明..."
-          />
+    <div className="page-shell page-shell--editor">
+      <div className="admin-editor-page">
+        <div>
+          <Link href="/admin" className="back-link back-link--inline">
+            {tr.back}
+          </Link>
         </div>
-        <div className="editor-field">
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
-            English content
-          </label>
-          <MarkdownEditor
-            value={contentEn}
-            onChange={setContentEn}
-            placeholder="Write MCP tools list, config notes..."
-          />
+        <div className="admin-page-hero">
+          <span className="admin-eyebrow">Writing Studio</span>
+          <h1 className="page-title page-title--admin">{tr.editMcpTitle}</h1>
+          <p className="admin-page-copy">Keep the tool notes focused, discoverable, and easy to scan.</p>
+        </div>
+        <div className="editor-actions editor-actions--end">
+          <button onClick={handleSave} disabled={saving} className="btn-primary">
+            {saving ? tr.saving : tr.save}
+          </button>
+        </div>
+
+        <div className="space-y-6">
+          <div className="editor-field">
+            <label className="field-label">
+              中文内容
+            </label>
+            <MarkdownEditor
+              value={contentZh}
+              onChange={setContentZh}
+              placeholder="写 MCP 工具列表、配置说明..."
+            />
+          </div>
+          <div className="editor-field">
+            <label className="field-label">
+              English content
+            </label>
+            <MarkdownEditor
+              value={contentEn}
+              onChange={setContentEn}
+              placeholder="Write MCP tools list, config notes..."
+            />
+          </div>
         </div>
       </div>
     </div>

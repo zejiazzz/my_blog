@@ -44,44 +44,50 @@ export default function EditPostPage({ params }: Props) {
 
   if (loading) {
     return (
-      <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
-        {tr.loading}
+      <div className="page-shell page-shell--editor">
+        <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          {tr.loading}
+        </div>
       </div>
     )
   }
 
   if (!post) {
     return (
-      <div className="admin-editor-page">
-        <div className="mb-8">
-          <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
-            {tr.back}
-          </Link>
-        </div>
+      <div className="page-shell page-shell--editor">
+        <div className="admin-editor-page">
+          <div>
+            <Link href="/admin" className="back-link back-link--inline">
+              {tr.back}
+            </Link>
+          </div>
 
-        <div className="empty-state" style={{ alignItems: 'flex-start', textAlign: 'left' }}>
-          <span style={{ color: 'var(--accent-red)' }}>!</span>
-          <span>{tr.postNotFound}</span>
+          <div className="empty-state empty-state--aligned">
+            <span style={{ color: 'var(--accent-red)' }}>!</span>
+            <span>{tr.postNotFound}</span>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="admin-editor-page">
-      <div className="mb-8">
-        <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
-          {tr.back}
-        </Link>
+    <div className="page-shell page-shell--editor">
+      <div className="admin-editor-page">
+        <div>
+          <Link href="/admin" className="back-link back-link--inline">
+            {tr.back}
+          </Link>
+        </div>
+        <div className="admin-page-hero">
+          <span className="admin-eyebrow">{tr.editorEyebrow}</span>
+          <h1 className="page-title page-title--admin">
+            {tr.editPostTitle}
+          </h1>
+          <p className="admin-page-copy">{tr.editPostDescription}</p>
+        </div>
+        <PostForm post={post} lang={lang} />
       </div>
-      <div className="admin-page-hero">
-        <span className="admin-eyebrow">{tr.editorEyebrow}</span>
-        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>
-          {tr.editPostTitle}
-        </h1>
-        <p className="admin-page-copy">{tr.editPostDescription}</p>
-      </div>
-      <PostForm post={post} lang={lang} />
     </div>
   )
 }

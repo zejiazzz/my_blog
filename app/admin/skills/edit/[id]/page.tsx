@@ -44,44 +44,50 @@ export default function EditSkillPage({ params }: Props) {
 
   if (loading) {
     return (
-      <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
-        {tr.loading}
+      <div className="page-shell page-shell--editor">
+        <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          {tr.loading}
+        </div>
       </div>
     )
   }
 
   if (!skill) {
     return (
-      <div className="admin-editor-page">
-        <div className="mb-8">
-          <Link href="/admin/skills" className="back-link" style={{ marginBottom: 0 }}>
-            {tr.back}
-          </Link>
-        </div>
+      <div className="page-shell page-shell--editor">
+        <div className="admin-editor-page">
+          <div>
+            <Link href="/admin/skills" className="back-link back-link--inline">
+              {tr.back}
+            </Link>
+          </div>
 
-        <div className="empty-state" style={{ alignItems: 'flex-start', textAlign: 'left' }}>
-          <span style={{ color: 'var(--accent-red)' }}>!</span>
-          <span>{tr.skillNotFound}</span>
+          <div className="empty-state empty-state--aligned">
+            <span style={{ color: 'var(--accent-red)' }}>!</span>
+            <span>{tr.skillNotFound}</span>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="admin-editor-page">
-      <div className="mb-8">
-        <Link href="/admin/skills" className="back-link" style={{ marginBottom: 0 }}>
-          {tr.back}
-        </Link>
+    <div className="page-shell page-shell--editor">
+      <div className="admin-editor-page">
+        <div>
+          <Link href="/admin/skills" className="back-link back-link--inline">
+            {tr.back}
+          </Link>
+        </div>
+        <div className="admin-page-hero">
+          <span className="admin-eyebrow">Writing Studio</span>
+          <h1 className="page-title page-title--admin">
+            {tr.editSkillTitle}
+          </h1>
+          <p className="admin-page-copy">Adjust metadata, update the content, and keep both language versions aligned.</p>
+        </div>
+        <SkillForm skill={skill} lang={lang} />
       </div>
-      <div className="admin-page-hero">
-        <span className="admin-eyebrow">Writing Studio</span>
-        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>
-          {tr.editSkillTitle}
-        </h1>
-        <p className="admin-page-copy">Adjust metadata, update the content, and keep both language versions aligned.</p>
-      </div>
-      <SkillForm skill={skill} lang={lang} />
     </div>
   )
 }

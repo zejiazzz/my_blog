@@ -37,10 +37,11 @@ export default function MarkdownEditor({
 
       const instance = new Editor({
         el: rootRef.current,
-        height: '520px',
+        // 用 tab 预览保持 Markdown 输入区单栏全宽，避免窄容器下再被左右分栏压缩。
+        height: '76vh',
         initialValue: initialValueRef.current,
         initialEditType: 'wysiwyg',
-        previewStyle: 'vertical',
+        previewStyle: 'tab',
         placeholder,
         usageStatistics: false,
       })

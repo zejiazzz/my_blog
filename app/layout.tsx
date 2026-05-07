@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${geist.variable} ${geistMono.variable} min-h-screen`}>
         <ThemeProvider>
           <Nav />
-          <main className="page-container">{children}</main>
+          <main className="site-main">{children}</main>
         </ThemeProvider>
       </body>
     </html>

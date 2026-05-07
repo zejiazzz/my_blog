@@ -46,48 +46,50 @@ export default function AdminAboutPage() {
   }
 
   if (loading) {
-    return <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</div>
+    return <div className="page-shell page-shell--editor text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</div>
   }
 
   return (
-    <div className="admin-editor-page">
-      <div className="mb-8">
-        <Link href="/admin" className="back-link" style={{ marginBottom: 0 }}>
-          ← back
-        </Link>
-      </div>
-      <div className="admin-page-hero">
-        <span className="admin-eyebrow">Writing Studio</span>
-        <h1 className="text-2xl font-semibold" style={{ color: 'var(--text)' }}>Edit About</h1>
-        <p className="admin-page-copy">Keep the biography page concise, readable, and easy to update.</p>
-      </div>
-      <div className="editor-actions" style={{ justifyContent: 'flex-end' }}>
-        <button onClick={handleSave} disabled={saving} className="btn-primary">
-          {saving ? 'saving...' : 'save'}
-        </button>
-      </div>
-
-      <div className="space-y-6">
-        <div className="editor-field">
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
-            中文内容
-          </label>
-          <MarkdownEditor
-            value={contentZh}
-            onChange={setContentZh}
-            placeholder="写中文简介 / 简历..."
-          />
+    <div className="page-shell page-shell--editor">
+      <div className="admin-editor-page">
+        <div>
+          <Link href="/admin" className="back-link back-link--inline">
+            ← back
+          </Link>
+        </div>
+        <div className="admin-page-hero">
+          <span className="admin-eyebrow">Writing Studio</span>
+          <h1 className="page-title page-title--admin">Edit About</h1>
+          <p className="admin-page-copy">Keep the biography page concise, readable, and easy to update.</p>
+        </div>
+        <div className="editor-actions editor-actions--end">
+          <button onClick={handleSave} disabled={saving} className="btn-primary">
+            {saving ? 'saving...' : 'save'}
+          </button>
         </div>
 
-        <div className="editor-field">
-          <label className="block text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
-            English content
-          </label>
-          <MarkdownEditor
-            value={contentEn}
-            onChange={setContentEn}
-            placeholder="Write English bio / resume..."
-          />
+        <div className="space-y-6">
+          <div className="editor-field">
+            <label className="field-label">
+              中文内容
+            </label>
+            <MarkdownEditor
+              value={contentZh}
+              onChange={setContentZh}
+              placeholder="写中文简介 / 简历..."
+            />
+          </div>
+
+          <div className="editor-field">
+            <label className="field-label">
+              English content
+            </label>
+            <MarkdownEditor
+              value={contentEn}
+              onChange={setContentEn}
+              placeholder="Write English bio / resume..."
+            />
+          </div>
         </div>
       </div>
     </div>

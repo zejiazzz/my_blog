@@ -16,27 +16,32 @@ export default function SkillCard({ skill, index = 0, lang = 'zh' }: Props) {
 
   return (
     <Link href={`/skills/${skill.slug}`} className="post-card">
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '1rem' }}>
-        <h2 className="post-card-title">
-          <span className="post-card-meta" style={{ marginRight: '0.625rem' }}>
-            {String(index + 1).padStart(2, '0')}
-          </span>
-          {title}
-        </h2>
-        {skill.category && <span className="post-card-meta">{skill.category}</span>}
+      <div className="post-card-index" aria-hidden="true">
+        <span className="post-card-index-label">
+          {String(index + 1).padStart(2, '0')}
+        </span>
       </div>
 
-      {summary && <p className="post-card-excerpt">{summary}</p>}
-
-      {skill.tags.length > 0 && (
-        <div className="tag-row">
-          {skill.tags.map((tag) => (
-            <span key={tag} className="tag-chip">
-              {tag}
-            </span>
-          ))}
+      <div className="post-card-body">
+        <div className="post-card-header">
+          <span className="post-card-kicker">{skill.category || (lang === 'zh' ? '技能' : 'Skill')}</span>
+          <span className="post-card-meta">{skill.slug}</span>
         </div>
-      )}
+
+        <h2 className="post-card-title">{title}</h2>
+
+        {summary && <p className="post-card-excerpt">{summary}</p>}
+
+        {skill.tags.length > 0 && (
+          <div className="tag-row">
+            {skill.tags.map((tag) => (
+              <span key={tag} className="tag-chip">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </Link>
   )
 }

@@ -83,117 +83,102 @@ export default function PostForm({ post, lang = 'zh' }: PostFormProps) {
     }
   }
 
-  const labelStyle = {
-    display: 'block',
-    fontSize: '0.82rem',
-    fontWeight: 600,
-    color: 'var(--text-muted)',
-    marginBottom: '0.55rem',
-    letterSpacing: '-0.01em',
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="editor-form">
-      <div className="editor-field">
-        <label style={labelStyle}>{tr.formTitle}</label>
-        <input
-          name="title"
-          type="text"
-          defaultValue={post?.title ?? ''}
-          onChange={handleTitleChange}
-          required
-          placeholder="My awesome post"
-          className="input-dark"
-        />
-      </div>
-
-      <div className="editor-field">
-        <label style={labelStyle}>{tr.formSlug}</label>
-        <div className="relative">
-          <span
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-xs select-none"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            /posts/
-          </span>
+    <form onSubmit={handleSubmit} className="editor-form editor-workbench">
+      <div className="editor-main-column">
+        <div className="editor-field">
+          <label className="field-label">{tr.formTitle}</label>
           <input
-            name="slug"
+            name="title"
             type="text"
-            value={slug}
-            onChange={handleSlugChange}
+            defaultValue={post?.title ?? ''}
+            onChange={handleTitleChange}
             required
-            placeholder="my-awesome-post"
+            placeholder="My awesome post"
             className="input-dark"
-            style={{ paddingLeft: '4.25rem' }}
           />
         </div>
-      </div>
 
-      <div className="editor-field">
-        <div className="editor-field-header">
-          <label style={labelStyle}>{tr.formContent}</label>
-          <span className="editor-field-tip">{tr.editorModes}</span>
-        </div>
-        <MarkdownEditor
-          value={content}
-          onChange={setContent}
-          placeholder={tr.editorPlaceholder}
-        />
-        <p className="editor-helper-text">
-          {tr.editorHint}
-        </p>
-      </div>
-
-      <div className="editor-field">
-        <label style={labelStyle}>
-          {tr.formExcerpt}{' '}
-          <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>{tr.optional}</span>
-        </label>
-        <textarea
-          name="excerpt"
-          defaultValue={post?.excerpt ?? ''}
-          rows={3}
-          placeholder="Short description shown in post list..."
-          className="input-dark"
-          style={{ resize: 'vertical' }}
-        />
-      </div>
-
-      <div className="editor-panel">
-        <div className="editor-field-header">
-          <span style={labelStyle}>{tr.formPublish}</span>
-          <span className="editor-field-tip">{tr.publishHelp}</span>
-        </div>
-        <div className="relative">
-          <input
-            name="published"
-            type="checkbox"
-            id="published"
-            defaultChecked={post?.published ?? false}
-            className="sr-only peer"
+        <div className="editor-field editor-field--editor">
+          <div className="editor-field-header">
+            <label className="field-label">{tr.formContent}</label>
+            <span className="editor-field-tip">{tr.editorModes}</span>
+          </div>
+          <MarkdownEditor
+            value={content}
+            onChange={setContent}
+            placeholder={tr.editorPlaceholder}
           />
-          <label
-            htmlFor="published"
-            className="flex items-center gap-2 cursor-pointer select-none text-sm"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            <span
-              className="w-8 h-4 rounded-full flex items-center px-0.5 transition-colors peer-checked:bg-[var(--accent)] peer-checked:bg-opacity-80"
-              style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}
-            >
-              <span className="w-3 h-3 rounded-full bg-current transition-transform peer-checked:translate-x-4" />
-            </span>
-            {tr.publishLabel}
+          <p className="editor-helper-text">
+            {tr.editorHint}
+          </p>
+        </div>
+      </div>
+
+      <aside className="editor-side-column">
+        <div className="editor-field">
+          <label className="field-label">{tr.formSlug}</label>
+          <div className="editor-slug-input">
+            <span className="editor-slug-prefix">/posts/</span>
+            <input
+              name="slug"
+              type="text"
+              value={slug}
+              onChange={handleSlugChange}
+              required
+              placeholder="my-awesome-post"
+              className="input-dark editor-slug-control"
+            />
+          </div>
+        </div>
+
+        <div className="editor-field">
+          <label className="field-label">
+            {tr.formExcerpt}{' '}
+            <span className="field-label-note">{tr.optional}</span>
           </label>
+          <textarea
+            name="excerpt"
+            defaultValue={post?.excerpt ?? ''}
+            rows={5}
+            placeholder="Short description shown in post list..."
+            className="input-dark"
+            style={{ resize: 'vertical' }}
+          />
         </div>
-      </div>
 
-      <div className="editor-actions">
-        <button type="submit" disabled={loading} className="btn-primary">
-          {loading ? tr.saving : post ? tr.updateBtn : tr.createBtn}
-        </button>
-        <span className="editor-field-tip">{tr.saveFormat}</span>
-      </div>
+        <div className="editor-panel editor-panel--sticky">
+          <div className="editor-field-header">
+            <span className="field-label field-label--compact">{tr.formPublish}</span>
+            <span className="editor-field-tip">{tr.publishHelp}</span>
+          </div>
+          <div className="editor-publish-toggle">
+            <input
+              name="published"
+              type="checkbox"
+              id="published"
+              defaultChecked={post?.published ?? false}
+              className="sr-only peer"
+            />
+            <label
+              htmlFor="published"
+              className="editor-publish-label"
+            >
+              <span className="editor-publish-switch">
+                <span className="editor-publish-knob" />
+              </span>
+              {tr.publishLabel}
+            </label>
+          </div>
+
+          <div className="editor-actions editor-actions--stack">
+            <button type="submit" disabled={loading} className="btn-primary">
+              {loading ? tr.saving : post ? tr.updateBtn : tr.createBtn}
+            </button>
+            <span className="editor-field-tip">{tr.saveFormat}</span>
+          </div>
+        </div>
+      </aside>
     </form>
   )
 }

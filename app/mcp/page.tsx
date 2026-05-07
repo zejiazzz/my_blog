@@ -17,14 +17,14 @@ export default async function McpPage() {
   const content = lang === 'zh' ? (data?.content || '') : (data?.content_en || '')
 
   return (
-    <div>
-      <div className="mb-10">
-        <Link href="/" className="back-link" style={{ marginBottom: 0 }}>
+    <div className="page-shell page-shell--reading page-stack">
+      <div>
+        <Link href="/" className="back-link back-link--inline">
           {tr.back}
         </Link>
       </div>
 
-      <div className="mb-12">
+      <div className="page-header">
         <span className="page-eyebrow">{eyebrow}</span>
         <h1 className="page-title">{tr.title}</h1>
       </div>

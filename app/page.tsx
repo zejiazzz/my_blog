@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import { cookies } from 'next/headers'
 import PostCard from '@/components/PostCard'
@@ -21,57 +22,71 @@ export default async function HomePage() {
 
   const count = posts?.length ?? 0
   const countLabel = lang === 'zh' ? `${count} 篇文章` : `${count} ${count === 1 ? 'entry' : 'entries'}`
+  const latestPost = posts?.[0] ?? null
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <div
-        style={{
-          marginBottom: '0.25rem',
-          padding: '0.5rem 0 0.25rem',
-          borderBottom: '1px solid color-mix(in srgb, var(--border) 72%, transparent)',
-        }}
-      >
-        <span
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            padding: '0.32rem 0.68rem',
-            borderRadius: 999,
-            background: 'color-mix(in srgb, var(--bg-elevated) 86%, transparent)',
-            color: 'var(--text-muted)',
-            fontSize: '0.75rem',
-            marginBottom: '1rem',
-          }}
-        >
-          {collectionLabel}
-        </span>
-        <h1 className="page-title">{tr.title}</h1>
-        <p className="page-subtitle" style={{ marginTop: '0.75rem', maxWidth: 560, fontSize: '0.98rem', lineHeight: 1.85, color: 'var(--text-secondary)' }}>
-          {intro}
-        </p>
-        <p className="page-subtitle" style={{ marginTop: '1rem', fontSize: '0.8rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-          {countLabel}
-        </p>
-      </div>
+    <div className="page-shell page-shell--home home-shell">
+      <section className="home-hero">
+        <div className="home-hero-copy">
+          <span className="page-eyebrow">{collectionLabel}</span>
+          <h1 className="page-title">{tr.title}</h1>
+          <p className="home-intro">{intro}</p>
+          <div className="home-stat-row">
+            <span className="home-stat">{countLabel}</span>
+            <span className="home-stat-note">
+              {lang === 'zh' ? '按时间倒序整理，优先服务连续阅读。' : 'Ordered by date and tuned for sustained reading.'}
+            </span>
+          </div>
+        </div>
 
-      {count === 0 ? (
-        <div
-          className="empty-state"
-          style={{
-            borderStyle: 'solid',
-            borderRadius: 20,
-            background: 'linear-gradient(180deg, color-mix(in srgb, var(--bg-card) 92%, transparent), transparent)',
-          }}
-        >
-          {tr.empty}
+        <aside className="home-feature-card">
+          <span className="home-feature-label">
+            {lang === 'zh' ? '最新入口' : 'Latest note'}
+          </span>
+          {latestPost ? (
+            <>
+              <h2 className="home-feature-title">{latestPost.title}</h2>
+              <p className="home-feature-excerpt">
+                {(latestPost.excerpt || latestPost.content)
+                  .replace(/^#{1,6}\s+/gm, '')
+                  .replace(/[*_`]/g, '')
+                  .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+                  .replace(/\n+/g, ' ')
+                  .trim()
+                  .slice(0, 120)}
+                …
+              </p>
+              <Link href={`/posts/${latestPost.slug}`} className="btn-ghost home-feature-link">
+                {lang === 'zh' ? '进入正文' : 'Open essay'}
+              </Link>
+            </>
+          ) : (
+            <div className="empty-state empty-state--soft">{tr.empty}</div>
+          )}
+        </aside>
+      </section>
+
+      <section className="home-index">
+        <div className="home-index-heading">
+          <div>
+            <p className="home-index-label">{lang === 'zh' ? '文章索引' : 'Index'}</p>
+            <h2 className="home-index-title">{collectionLabel}</h2>
+          </div>
+          <p className="home-index-note">
+            {lang === 'zh' ? '标题优先，摘要适度，保留进入正文前的判断空间。' : 'Title first, enough summary, and a clear path into the full piece.'}
+          </p>
         </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {posts!.map((post, i) => (
-            <PostCard key={post.id} post={post} index={i} lang={lang} />
-          ))}
-        </div>
-      )}
+
+        {count === 0 ? (
+          <div className="empty-state">{tr.empty}</div>
+        ) : (
+          <div className="post-list">
+            {posts!.map((post, i) => (
+              <PostCard key={post.id} post={post} index={i} lang={lang} />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   )
 }

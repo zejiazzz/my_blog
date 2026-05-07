@@ -21,7 +21,7 @@ export default async function AboutPage() {
   const content = lang === 'zh' ? (data?.content || '') : (data?.content_en || '')
 
   return (
-    <div>
+    <div className="page-shell page-shell--reading page-stack">
       <Link href="/" className="back-link">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M12 5l-7 7 7 7" />
@@ -29,7 +29,7 @@ export default async function AboutPage() {
         {tr.back}
       </Link>
 
-      <div style={{ marginBottom: '2.5rem' }}>
+      <div className="page-header">
         <h1 className="page-title">{tr.title}</h1>
       </div>
 

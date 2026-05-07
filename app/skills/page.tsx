@@ -22,7 +22,7 @@ export default async function SkillsPage() {
   const count = skills?.length ?? 0
 
   return (
-    <div>
+    <div className="page-shell page-shell--reading page-stack">
       <Link href="/" className="back-link">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M12 5l-7 7 7 7" />
@@ -30,7 +30,7 @@ export default async function SkillsPage() {
         {tr.back}
       </Link>
 
-      <div style={{ marginBottom: '2.5rem' }}>
+      <div className="page-header">
         <h1 className="page-title">{tr.title}</h1>
         <p className="page-subtitle">
           {count} {lang === 'zh' ? '个技能' : count === 1 ? 'skill' : 'skills'}
@@ -40,7 +40,7 @@ export default async function SkillsPage() {
       {count === 0 ? (
         <div className="empty-state">{tr.empty}</div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div className="post-list">
           {skills!.map((skill, i) => (
             <SkillCard key={skill.id} skill={skill} index={i} lang={lang} />
           ))}

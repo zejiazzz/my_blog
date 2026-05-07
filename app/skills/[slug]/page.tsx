@@ -35,33 +35,38 @@ export default async function SkillPage({ params }: Props) {
   const content = lang === 'zh' ? skill.content : skill.content_en || skill.content
 
   return (
-    <article>
-      <Link href="/skills" className="back-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M19 12H5M12 5l-7 7 7 7" />
-        </svg>
-        {tr.back}
-      </Link>
+    <div className="page-shell page-shell--reading">
+      <article className="article-page">
+        <Link href="/skills" className="back-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          {tr.back}
+        </Link>
 
-      <header className="article-header">
-        <h1 className="article-title">{title}</h1>
-        <div className="article-meta">
-          <span className="article-meta-dot" />
-          {skill.category && <span>{skill.category}</span>}
-          <span style={{ color: 'var(--text-dim)' }}>·</span>
-          <span style={{ color: 'var(--text-muted)' }}>{skill.slug}</span>
-        </div>
-        {summary && <p className="page-subtitle" style={{ marginTop: '1rem' }}>{summary}</p>}
-        {skill.tags.length > 0 && (
-          <div className="tag-row" style={{ marginTop: '1rem' }}>
-            {(skill.tags as string[]).map((tag) => (
-              <span key={tag} className="tag-chip">{tag}</span>
-            ))}
+        <header className="article-header">
+          <span className="page-eyebrow">{lang === 'zh' ? '技能条目' : 'Skill note'}</span>
+          <h1 className="article-title">{title}</h1>
+          <div className="article-meta">
+            <span className="article-meta-dot" />
+            {skill.category && <span>{skill.category}</span>}
+            <span className="article-meta-separator">/</span>
+            <span>{skill.slug}</span>
           </div>
-        )}
-      </header>
+          {summary && <p className="article-lead">{summary}</p>}
+          {skill.tags.length > 0 && (
+            <div className="tag-row">
+              {(skill.tags as string[]).map((tag) => (
+                <span key={tag} className="tag-chip">{tag}</span>
+              ))}
+            </div>
+          )}
+        </header>
 
-      <MarkdownRenderer content={content} />
-    </article>
+        <div className="article-body">
+          <MarkdownRenderer content={content} />
+        </div>
+      </article>
+    </div>
   )
 }
